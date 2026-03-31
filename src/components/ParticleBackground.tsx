@@ -194,7 +194,7 @@ export default function ParticleBackground() {
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage: `url(${bgImages[theme]})`,
-              filter: "blur(6px) brightness(0.55)",
+              filter: "blur(2px) brightness(0.65)",
               transform: "scale(1.1)",
             }}
           />
