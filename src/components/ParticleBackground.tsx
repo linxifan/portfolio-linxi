@@ -119,30 +119,50 @@ const Bubble = ({ p }: { p: Particle }) => {
   );
 };
 
-const Snowflake = ({ p }: { p: Particle }) => (
-  <motion.div
-    className="absolute rounded-full"
-    style={{
-      left: `${p.x}%`,
-      top: -20,
-      width: p.size,
-      height: p.size,
-      background: "radial-gradient(circle, hsl(0 0% 100% / 0.95) 30%, hsl(210 50% 95% / 0.4) 100%)",
-      boxShadow: "0 0 8px hsl(210 60% 92% / 0.6)",
-    }}
-    animate={{
-      y: [0, window.innerHeight + 40],
-      x: [0, p.swayAmount * 0.7, -p.swayAmount * 0.5, p.swayAmount * 0.2],
-      rotate: [0, 120, 240, 360],
-    }}
-    transition={{
-      duration: p.duration * 1.4,
-      delay: p.delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
-  />
-);
+const Snowflake = ({ p }: { p: Particle }) => {
+  const sz = p.size * 1.8 + 6;
+  const isLarge = p.id % 3 === 0;
+  return (
+    <motion.div
+      className="absolute"
+      style={{
+        left: `${p.x}%`,
+        top: -30,
+        width: sz,
+        height: sz,
+        opacity: p.opacity,
+      }}
+      animate={{
+        y: [0, window.innerHeight + 60],
+        x: [0, p.swayAmount * 0.8, -p.swayAmount * 0.6, p.swayAmount * 0.3],
+        rotate: [0, 180, 360],
+      }}
+      transition={{
+        duration: p.duration * 1.6,
+        delay: p.delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    >
+      {/* Snowflake shape using CSS */}
+      {isLarge ? (
+        <svg viewBox="0 0 100 100" width={sz} height={sz}>
+          <text x="50" y="65" textAnchor="middle" fontSize="70" fill="white" style={{ filter: "drop-shadow(0 0 4px hsl(210 80% 90% / 0.8))" }}>
+            ❄
+          </text>
+        </svg>
+      ) : (
+        <div
+          className="w-full h-full rounded-full"
+          style={{
+            background: "radial-gradient(circle, hsl(0 0% 100% / 0.95) 20%, hsl(210 60% 95% / 0.5) 70%, transparent 100%)",
+            boxShadow: "0 0 10px hsl(210 60% 95% / 0.7)",
+          }}
+        />
+      )}
+    </motion.div>
+  );
+};
 
 const ParticleRenderer: Record<Theme, React.FC<{ p: Particle }>> = {
   rain: RainDrop,
