@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
 import spaceBg from "@/assets/space-bg.jpeg";
-import planet1 from "@/assets/planet-1.png";
-import planet2 from "@/assets/planet-2.png";
-import planet3 from "@/assets/planet-3.png";
-import planet4 from "@/assets/planet-4.png";
-import planet5 from "@/assets/planet-5.png";
 
 interface Experience {
   id: number;
@@ -15,10 +9,9 @@ interface Experience {
   location: string;
   description: string;
   skills: string[];
-  planetImg: string;
-  // position as percentage [x, y] within the container
+  // hotspot position [x%, y%] mapped to the planets in the original image
   pos: [number, number];
-  size: number; // planet size in px
+  hitSize: number; // clickable area size in px
 }
 
 const experiences: Experience[] = [
@@ -26,64 +19,96 @@ const experiences: Experience[] = [
     id: 1, title: "Job Title 1", company: "Company A", location: "City, Country",
     description: "Describe your work responsibilities and achievements here.",
     skills: ["Python", "React", "SQL"],
-    planetImg: planet1, pos: [68, 12], size: 72,
+    pos: [72, 13], hitSize: 50,
   },
   {
     id: 2, title: "Job Title 2", company: "Company B", location: "City, Country",
     description: "Describe your work responsibilities and achievements here.",
     skills: ["JavaScript", "Node.js", "MongoDB"],
-    planetImg: planet2, pos: [55, 32], size: 90,
+    pos: [52, 35], hitSize: 70,
   },
   {
     id: 3, title: "Job Title 3", company: "Company C", location: "City, Country",
     description: "Describe your work responsibilities and achievements here.",
     skills: ["C++", "Java", "AWS"],
-    planetImg: planet3, pos: [72, 52], size: 64,
+    pos: [75, 27], hitSize: 40,
   },
   {
     id: 4, title: "Job Title 4", company: "Company D", location: "City, Country",
     description: "Describe your work responsibilities and achievements here.",
     skills: ["TypeScript", "GraphQL", "Docker"],
-    planetImg: planet4, pos: [50, 70], size: 80,
+    pos: [30, 65], hitSize: 45,
   },
   {
     id: 5, title: "Job Title 5", company: "Company E", location: "City, Country",
     description: "Describe your work responsibilities and achievements here.",
     skills: ["Rust", "Go", "Kubernetes"],
-    planetImg: planet5, pos: [65, 88], size: 68,
+    pos: [62, 75], hitSize: 55,
   },
 ];
 
-function PlanetDetail({ exp, onClose }: { exp: Experience; onClose: () => void }) {
+/* Round notebook popup */
+function NotebookDetail({ exp, onClose }: { exp: Experience; onClose: () => void }) {
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
     >
       <motion.div
-        className="relative w-72 h-72 md:w-96 md:h-96 rounded-full flex flex-col items-center justify-center text-center p-10 overflow-hidden"
-        initial={{ scale: 0, rotate: -60 }}
+        className="relative w-72 h-72 md:w-80 md:h-80 rounded-full flex flex-col items-center justify-center text-center overflow-hidden"
+        style={{
+          background: "linear-gradient(145deg, hsl(40 25% 93%), hsl(40 20% 87%))",
+          boxShadow: "0 8px 40px hsl(0 0% 0% / 0.4), inset 0 0 20px hsl(0 0% 100% / 0.15)",
+          border: "3px solid hsl(220 15% 75% / 0.5)",
+        }}
+        initial={{ scale: 0, rotate: -30 }}
         animate={{ scale: 1, rotate: 0 }}
-        exit={{ scale: 0, rotate: 60 }}
-        transition={{ type: "spring", damping: 20 }}
+        exit={{ scale: 0, rotate: 30 }}
+        transition={{ type: "spring", damping: 18 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <img src={exp.planetImg} alt="" className="absolute inset-0 w-full h-full object-cover rounded-full" style={{ filter: "brightness(0.45) blur(1px)" }} />
-        <div className="relative z-10">
-          <h3 className="text-xl font-bold text-foreground mb-1" style={{ fontFamily: "var(--font-display)" }}>{exp.title}</h3>
-          <p className="text-sm text-foreground/80 mb-1">{exp.company}</p>
-          <p className="text-xs text-foreground/60 mb-3">📍 {exp.location}</p>
-          <p className="text-xs text-foreground/70 mb-3 leading-relaxed">{exp.description}</p>
+        {/* Notebook lines decoration */}
+        <div className="absolute inset-8 pointer-events-none opacity-[0.08]">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="border-b border-gray-500 mb-3" />
+          ))}
+        </div>
+
+        <div className="relative z-10 px-10">
+          <h3
+            className="text-lg md:text-xl font-bold mb-1"
+            style={{ fontFamily: "var(--font-display)", color: "hsl(220 30% 20%)" }}
+          >
+            {exp.title}
+          </h3>
+          <p className="text-sm mb-0.5" style={{ color: "hsl(220 20% 35%)" }}>{exp.company}</p>
+          <p className="text-xs mb-2" style={{ color: "hsl(220 15% 50%)" }}>📍 {exp.location}</p>
+          <p className="text-xs leading-relaxed mb-3" style={{ color: "hsl(220 15% 40%)" }}>
+            {exp.description}
+          </p>
           <div className="flex flex-wrap gap-1 justify-center">
             {exp.skills.map((s) => (
-              <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-background/30 text-foreground/80">{s}</span>
+              <span
+                key={s}
+                className="text-[10px] px-2 py-0.5 rounded-full"
+                style={{ background: "hsl(220 20% 82% / 0.6)", color: "hsl(220 25% 30%)" }}
+              >
+                {s}
+              </span>
             ))}
           </div>
         </div>
-        <button onClick={onClose} className="absolute top-1 right-1 w-8 h-8 rounded-full bg-card/80 text-foreground flex items-center justify-center text-sm hover:bg-destructive transition-colors z-20">✕</button>
+
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center text-xs z-20 transition-colors"
+          style={{ background: "hsl(220 15% 80%)", color: "hsl(220 25% 30%)" }}
+        >
+          ✕
+        </button>
       </motion.div>
     </motion.div>
   );
@@ -105,7 +130,7 @@ export default function ExperienceSection() {
         🪐 My Experience Galaxy
       </motion.h2>
 
-      {/* Space scene container */}
+      {/* Space scene — uses the original image directly */}
       <motion.div
         className="relative w-full rounded-2xl overflow-hidden mx-auto"
         style={{ maxWidth: 448, aspectRatio: "3 / 4" }}
@@ -113,105 +138,88 @@ export default function ExperienceSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        {/* Background image — the exact uploaded space scene */}
         <img
           src={spaceBg}
-          alt=""
+          alt="Experience galaxy"
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
           width={1024}
           height={1024}
         />
 
-        {/* Connecting lines between planets (SVG) */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-          {experiences.slice(0, -1).map((exp, i) => {
-            const next = experiences[i + 1];
-            return (
-              <motion.line
-                key={exp.id}
-                x1={exp.pos[0]}
-                y1={exp.pos[1]}
-                x2={next.pos[0]}
-                y2={next.pos[1]}
-                stroke="hsl(210 60% 80% / 0.35)"
-                strokeWidth="0.3"
-                strokeDasharray="1 0.8"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.3, duration: 0.8 }}
-              />
-            );
-          })}
-        </svg>
-
-        {/* Planets */}
+        {/* Invisible clickable hotspots over the existing planets in the image */}
         {experiences.map((exp, i) => (
-          <motion.div
+          <motion.button
             key={exp.id}
-            className="absolute z-20 flex items-center gap-2"
+            className="absolute z-20 rounded-full cursor-pointer"
             style={{
               left: `${exp.pos[0]}%`,
               top: `${exp.pos[1]}%`,
+              width: exp.hitSize,
+              height: exp.hitSize,
               transform: "translate(-50%, -50%)",
+              background: hoveredId === exp.id
+                ? "radial-gradient(circle, hsl(210 80% 80% / 0.3) 0%, transparent 70%)"
+                : "transparent",
+              boxShadow: hoveredId === exp.id
+                ? "0 0 25px hsl(210 80% 80% / 0.4)"
+                : "none",
+              transition: "all 0.3s",
             }}
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            onMouseEnter={() => setHoveredId(exp.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => setSelected(exp)}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.2, type: "spring" }}
-          >
-            {/* Title label — positioned to the left */}
-            <motion.div
-              className="text-right mr-1 pointer-events-none select-none"
-              style={{ minWidth: 80 }}
-              animate={{ opacity: hoveredId === exp.id ? 1 : 0.7 }}
-            >
-              <p
-                className="text-xs md:text-sm font-semibold leading-tight drop-shadow-lg transition-colors duration-300"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  color: hoveredId === exp.id ? "hsl(var(--primary))" : "hsl(0 0% 95%)",
-                  textShadow: "0 1px 6px rgba(0,0,0,0.8)",
-                }}
-              >
-                {exp.title}
-              </p>
-              <p className="text-[10px] leading-tight" style={{ color: "hsl(0 0% 80%)", textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
-                {exp.company}
-              </p>
-            </motion.div>
-
-            {/* Planet orb */}
-            <motion.button
-              className="relative rounded-full flex-shrink-0 cursor-pointer overflow-hidden"
-              style={{ width: exp.size, height: exp.size }}
-              onMouseEnter={() => setHoveredId(exp.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              whileHover={{ scale: 1.3, rotate: 15 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSelected(exp)}
-            >
-              <img
-                src={exp.planetImg}
-                alt={exp.title}
-                className="w-full h-full object-cover rounded-full transition-all duration-300"
-                style={{
-                  filter: hoveredId === exp.id
-                    ? "brightness(1.3) drop-shadow(0 0 15px hsl(var(--primary) / 0.7))"
-                    : "brightness(0.85)",
-                }}
-                loading="lazy"
-                width={512}
-                height={512}
-              />
-            </motion.button>
-          </motion.div>
+            transition={{ delay: i * 0.15 }}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+          />
         ))}
+
+        {/* Hover labels */}
+        {experiences.map((exp) => (
+          <AnimatePresence key={exp.id}>
+            {hoveredId === exp.id && (
+              <motion.div
+                className="absolute z-30 pointer-events-none"
+                style={{
+                  left: `${exp.pos[0]}%`,
+                  top: `${exp.pos[1] - 8}%`,
+                  transform: "translate(-50%, -100%)",
+                }}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+              >
+                <div
+                  className="px-3 py-1.5 rounded-lg text-center"
+                  style={{
+                    background: "hsl(0 0% 10% / 0.75)",
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  <p className="text-xs font-semibold text-foreground" style={{ fontFamily: "var(--font-display)" }}>
+                    {exp.title}
+                  </p>
+                  <p className="text-[10px] text-foreground/70">{exp.company}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        ))}
+
+        {/* Hint text */}
+        <div className="absolute bottom-3 left-0 right-0 text-center z-10">
+          <p className="text-[10px] text-foreground/50" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
+            Click on a planet to see details ✨
+          </p>
+        </div>
       </motion.div>
 
       <AnimatePresence>
-        {selected && <PlanetDetail exp={selected} onClose={() => setSelected(null)} />}
+        {selected && <NotebookDetail exp={selected} onClose={() => setSelected(null)} />}
       </AnimatePresence>
     </section>
   );
