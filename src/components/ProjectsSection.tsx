@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import notebookCover from "@/assets/notebook-cover.jpg";
 
 const languageIcons: Record<string, string> = {
   JavaScript: "🟨 JS",
@@ -47,7 +48,6 @@ const projects: ProjectPage[] = [
   },
 ];
 
-// Simple page turn sound using Web Audio API
 function playPageTurnSound() {
   try {
     const ctx = new AudioContext();
@@ -69,7 +69,7 @@ function playPageTurnSound() {
 }
 
 export default function ProjectsSection() {
-  const [page, setPage] = useState(-1); // -1 = cover
+  const [page, setPage] = useState(-1);
   const [direction, setDirection] = useState(0);
 
   const goNext = useCallback(() => {
@@ -89,15 +89,9 @@ export default function ProjectsSection() {
   }, [page]);
 
   const variants = {
-    enter: (d: number) => ({
-      rotateY: d > 0 ? 90 : -90,
-      opacity: 0,
-    }),
+    enter: (d: number) => ({ rotateY: d > 0 ? 90 : -90, opacity: 0 }),
     center: { rotateY: 0, opacity: 1 },
-    exit: (d: number) => ({
-      rotateY: d > 0 ? -90 : 90,
-      opacity: 0,
-    }),
+    exit: (d: number) => ({ rotateY: d > 0 ? -90 : 90, opacity: 0 }),
   };
 
   return (
@@ -112,7 +106,6 @@ export default function ProjectsSection() {
         📚 My Projects
       </motion.h2>
 
-      {/* Book */}
       <motion.div
         className="relative w-full max-w-md"
         style={{ perspective: 1200 }}
@@ -123,15 +116,9 @@ export default function ProjectsSection() {
         <div className="relative aspect-[3/4] w-full">
           <AnimatePresence mode="wait" custom={direction}>
             {page === -1 ? (
-              /* Cover */
               <motion.div
                 key="cover"
-                className="absolute inset-0 rounded-lg flex flex-col items-center justify-center p-8"
-                style={{
-                  background: "linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)))",
-                  border: "3px solid hsl(var(--border))",
-                  boxShadow: "4px 4px 20px hsl(0 0% 0% / 0.4), inset 0 0 30px hsl(0 0% 100% / 0.05)",
-                }}
+                className="absolute inset-0 rounded-lg overflow-hidden"
                 custom={direction}
                 variants={variants}
                 initial="enter"
@@ -139,25 +126,48 @@ export default function ProjectsSection() {
                 exit="exit"
                 transition={{ duration: 0.4 }}
               >
-                <span className="text-5xl mb-4">📖</span>
-                <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6" style={{ fontFamily: "var(--font-display)" }}>
-                  Projects I Did
-                </h3>
-                <div className="flex flex-wrap gap-2 justify-center mb-8">
-                  {Object.entries(languageIcons).map(([lang, icon]) => (
-                    <motion.span
-                      key={lang}
-                      className="text-xs px-3 py-1 rounded-full glass-card text-foreground/80"
-                      whileHover={{ scale: 1.1 }}
+                {/* Notebook cover background image */}
+                <img
+                  src={notebookCover}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                  width={768}
+                  height={1024}
+                />
+                {/* Center label area */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div
+                    className="flex flex-col items-center px-10 py-8 rounded-sm"
+                    style={{
+                      background: "hsl(40 20% 95% / 0.88)",
+                      border: "2px solid hsl(220 20% 60% / 0.3)",
+                      boxShadow: "0 2px 12px hsl(0 0% 0% / 0.1)",
+                    }}
+                  >
+                    <h3
+                      className="text-2xl md:text-3xl font-bold mb-4"
+                      style={{ fontFamily: "var(--font-display)", color: "hsl(220 30% 25%)" }}
                     >
-                      {icon}
-                    </motion.span>
-                  ))}
+                      Projects I Did
+                    </h3>
+                    <div className="flex flex-wrap gap-2 justify-center mb-4">
+                      {Object.entries(languageIcons).map(([lang, icon]) => (
+                        <motion.span
+                          key={lang}
+                          className="text-xs px-2 py-0.5 rounded-full"
+                          style={{ background: "hsl(220 20% 85% / 0.6)", color: "hsl(220 30% 30%)" }}
+                          whileHover={{ scale: 1.1 }}
+                        >
+                          {icon}
+                        </motion.span>
+                      ))}
+                    </div>
+                    <p className="text-sm" style={{ color: "hsl(220 20% 40%)" }}>Click → to read</p>
+                  </div>
                 </div>
-                <p className="text-muted-foreground text-sm">Click → to read</p>
               </motion.div>
             ) : (
-              /* Project page */
               <motion.div
                 key={page}
                 className="absolute inset-0 book-page rounded-lg flex flex-col p-8"
@@ -168,13 +178,11 @@ export default function ProjectsSection() {
                 exit="exit"
                 transition={{ duration: 0.4 }}
               >
-                {/* Page lines decoration */}
                 <div className="absolute inset-4 pointer-events-none opacity-10">
                   {Array.from({ length: 15 }).map((_, i) => (
                     <div key={i} className="border-b border-gray-400 mb-4" />
                   ))}
                 </div>
-
                 <div className="relative z-10">
                   <p className="text-xs text-gray-400 mb-4 text-right">
                     Page {page + 1} / {projects.length}
@@ -187,10 +195,7 @@ export default function ProjectsSection() {
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {projects[page].tech.map((t) => (
-                      <span
-                        key={t}
-                        className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-800"
-                      >
+                      <span key={t} className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-800">
                         {languageIcons[t] || t}
                       </span>
                     ))}
@@ -201,7 +206,6 @@ export default function ProjectsSection() {
           </AnimatePresence>
         </div>
 
-        {/* Navigation */}
         <div className="flex justify-between mt-4">
           <motion.button
             onClick={goPrev}
