@@ -108,7 +108,7 @@ export default function ExperienceSection() {
       {/* Space scene container */}
       <motion.div
         className="relative w-full rounded-2xl overflow-hidden mx-auto"
-        style={{ maxWidth: 700, aspectRatio: "9 / 16" }}
+        style={{ maxWidth: 448, aspectRatio: "3 / 4" }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
