@@ -75,7 +75,7 @@ const floatAnimation = (i: number) => ({
   transition: {
     duration: 3 + (i % 3),
     repeat: Infinity,
-    ease: "easeInOut",
+    ease: "easeInOut" as const,
   },
 });
 
