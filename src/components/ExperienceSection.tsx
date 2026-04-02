@@ -82,8 +82,9 @@ const floatAnimation = (i: number) => ({
 /* Glassmorphism tooltip */
 function PlanetTooltip({ exp, containerRef }: { exp: Experience; containerRef: React.RefObject<HTMLDivElement> }) {
   // Position tooltip above the planet center
-  const leftPct = ((BG_W - exp.right) / BG_W) * 100;
+  const leftPct = (exp.right / BG_W) * 100;
   const topPct = (exp.top / BG_H) * 100;
+  const radiusPct = (exp.size / 2 / BG_H) * 100;
 
   return (
     <motion.div
@@ -91,7 +92,7 @@ function PlanetTooltip({ exp, containerRef }: { exp: Experience; containerRef: R
       style={{
         left: `${leftPct}%`,
         top: `${topPct}%`,
-        transform: `translate(-50%, calc(-100% - ${exp.size * 0.5 * 0.6}px - 12px))`,
+        transform: `translate(-50%, calc(-100% - ${radiusPct}vh - 12px))`,
       }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -211,9 +212,9 @@ export default function ExperienceSection() {
 
         {/* Planets as interactive hotspots */}
         {experiences.map((exp, i) => {
-          const leftPct = ((BG_W - exp.right) / BG_W) * 100;
+          const leftPct = (exp.right / BG_W) * 100;
           const topPct = (exp.top / BG_H) * 100;
-          // Scale size proportionally (container maxWidth 448 vs BG_W 800)
+          // size = diameter in original coords, scale proportionally
           const sizePct = (exp.size / BG_W) * 100;
           const isHovered = hoveredId === exp.id;
 
