@@ -3,10 +3,9 @@ import { Mail, Linkedin, Github, FileDown } from "lucide-react";
 import React, { useRef, useState } from "react";
 
 const socialLinks = [
-  { icon: Mail, label: "Email", href: "mailto:your@email.com" },
-  { icon: Linkedin, label: "LinkedIn", href: "#" },
-  { icon: Github, label: "GitHub", href: "#" },
-  { icon: FileDown, label: "Resume", href: "#" },
+  { icon: Mail, label: "Email", href: "mailto:linxifan24@gmail.com" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/linxi-fan" },
+  { icon: Github, label: "GitHub", href: "https://github.com/linxifan" },
 ];
 
 function Magnetic({ children }: { children: React.ReactNode }) {
@@ -61,8 +60,12 @@ export default function ProfileSection() {
             className="w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden glass-card p-2 relative z-10"
             whileHover={{ scale: 1.02 }}
           >
-            <div className="w-full h-full rounded-xl bg-muted overflow-hidden flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-700">
-              <span className="text-6xl">📷</span>
+            <div className="w-full h-full rounded-xl bg-muted overflow-hidden flex items-center justify-center">
+              <img 
+                src="/avatar.jpg" 
+                alt="Linxi Fan" 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              />
             </div>
           </motion.div>
           {/* Decorative frame */}
@@ -80,7 +83,7 @@ export default function ProfileSection() {
         >
           <h1 className="text-7xl md:text-9xl font-serif mb-4 leading-none tracking-tight">
             <span className="block italic text-primary/80 text-4xl md:text-5xl border-l-4 border-primary pl-6 mb-4">Hello, I'm</span>
-            Your <span className="title-transparent hover:text-white/10">Name</span>
+            Linxi <span className="title-transparent hover:text-white/10">Fan</span>
           </h1>
           <p className="text-muted-foreground text-xl md:text-2xl font-light tracking-widest uppercase mb-12 max-w-md">
             Visual Storyteller & Digital Craftman

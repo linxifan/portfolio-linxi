@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
-import moonImg from "@/assets/moon.png";
 
 interface Experience {
   id: string;
@@ -274,10 +273,9 @@ export default function ExperienceSection() {
           ))}
         </div>
 
-        <motion.div className="w-32 h-32 rounded-full relative z-0 flex items-center justify-center overflow-hidden"
-                    style={{ boxShadow: "0 0 120px #ffffff44, 0 0 300px #ffffff22" }}>
-          <img src={moonImg} alt="Central Moon" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 blur-3xl bg-white/20 animate-pulse" />
+        <motion.div className="w-28 h-28 rounded-full relative z-0 flex items-center justify-center"
+                    style={{ background: "radial-gradient(circle, #fff, #ffcc33, #ff6600)", boxShadow: "0 0 120px #ff660088, 0 0 300px #ff660033" }}>
+          <div className="absolute inset-0 blur-3xl bg-orange-500/20 animate-pulse" />
         </motion.div>
 
         {experiences.map((exp) => (
