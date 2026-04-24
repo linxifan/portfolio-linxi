@@ -26,16 +26,20 @@ export default function AboutSection() {
         {/* Decorative corner */}
         <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-primary/30 rounded-tr-3xl" />
         
-        <p className="text-muted-foreground text-xl leading-relaxed font-light">
-          I believe that every pixel tells a story and every interaction creates an emotion. 
-          My journey started in the intersection of <span className="text-white">Design</span> and <span className="text-white">Technology</span>, 
-          where I found my voice in building immersive digital experiences. 
-        </p>
-        <br />
-        <p className="text-muted-foreground text-xl leading-relaxed font-light">
-          Today, I focus on crafting interfaces that feel as natural as physical objects while 
-          harnessing the limitless potential of the digital medium. ✨
-        </p>
+        <div className="space-y-8">
+          <p className="text-white text-2xl md:text-3xl font-serif italic leading-tight">
+            ”How do we build systems that stay reliable while everything around them keeps changing?“
+            <span className="block text-primary/80 text-lg md:text-xl font-sans not-italic mt-2 tracking-widest uppercase">— That’s the question that keeps me curious.</span>
+          </p>
+          
+          <p className="text-muted-foreground text-xl leading-relaxed font-light">
+            I enjoy working at the intersection of <span className="text-white font-medium">logic and building</span>, turning ideas into code, experimenting with new tools, and learning through projects. To me, computer science is both structured and creative: it’s about understanding systems, adapting to change, and solving problems in meaningful ways.
+          </p>
+
+          <p className="text-primary/90 text-lg md:text-xl font-serif italic tracking-wide">
+            Always exploring, always building—this is me, <span className="text-white">Linxi</span>, a student at the University of Waterloo :)
+          </p>
+        </div>
       </motion.div>
     </section>
   );
