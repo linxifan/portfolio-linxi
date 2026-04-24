@@ -105,7 +105,6 @@ function ProjectFrame({ project, onClick }: { project: Project; onClick: () => v
 
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
 
   // Clone projects for seamless marquee
   const doubledProjects = [...projects, ...projects];
@@ -129,15 +128,11 @@ export default function ProjectsSection() {
       </div>
 
       {/* Marquee Container */}
-      <div 
-        className="flex py-12 relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
+      <div className="flex py-12 relative">
         <motion.div 
           className="flex whitespace-nowrap"
           animate={{
-            x: isPaused ? undefined : ["0%", "-50%"],
+            x: ["0%", "-50%"],
           }}
           transition={{
             duration: 30,
