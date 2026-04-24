@@ -28,7 +28,7 @@ export default function AboutSection() {
         
         <div className="space-y-8">
           <p className="text-white text-2xl md:text-3xl font-serif italic leading-tight">
-            ”How do we build systems that stay reliable while everything around them keeps changing?“
+            “How do we build systems that stay reliable while everything around them keeps changing?”
             <span className="block text-primary/80 text-lg md:text-xl font-sans not-italic mt-2 tracking-widest uppercase">— That’s the question that keeps me curious.</span>
           </p>
           
