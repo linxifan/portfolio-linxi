@@ -41,7 +41,7 @@ function Magnetic({ children }: { children: React.ReactNode }) {
 
 export default function ProfileSection() {
   return (
-    <section id="profile" className="min-h-screen flex flex-col md:flex-row items-center justify-between py-32 px-12 gap-12 relative">
+    <section id="profile" className="min-h-screen flex flex-col md:flex-row items-center justify-between pt-48 pb-32 px-12 gap-12 relative">
       {/* Background large text decorative */}
       <div className="absolute -left-20 top-1/4 title-transparent text-[15rem] font-serif select-none pointer-events-none opacity-10 -rotate-12">
         Creative
@@ -64,7 +64,7 @@ export default function ProfileSection() {
               <img 
                 src={`${import.meta.env.BASE_URL}avatar.jpg`} 
                 alt="Linxi Fan" 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                className="w-full h-full object-cover object-[center_20%] group-hover:scale-110 transition-transform duration-700" 
               />
             </div>
           </motion.div>
@@ -74,7 +74,7 @@ export default function ProfileSection() {
       </motion.div>
 
       {/* Content in the Middle/Right */}
-      <div className="flex-1 flex flex-col items-start md:pl-12 relative z-10">
+      <div className="flex-1 flex flex-col items-start md:pl-12 md:pt-20 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
