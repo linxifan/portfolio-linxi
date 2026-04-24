@@ -38,13 +38,13 @@ function Crystal({ award, index }: { award: typeof awards[0]; index: number }) {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: index * 0.2 }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         animate={{
           y: [0, -15, 0],
         }}
         transition={{
+          delay: index * 0.2,
           duration: 4 + index,
           repeat: Infinity,
           ease: "easeInOut"
