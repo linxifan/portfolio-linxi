@@ -131,7 +131,7 @@ export default function ProfileSection() {
           50% { opacity: 0; }
         }
         .cursor-blink {
-          animation: blink 0.8s step-end infinite;
+          animation: blink 1.1s step-end infinite;
         }
       `}} />
     </section>
