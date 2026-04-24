@@ -262,6 +262,7 @@ export default function ExperienceSection() {
       </div>
 
       <motion.div className="text-center mb-20 z-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
+        <span className="text-primary font-bold tracking-[0.4em] uppercase text-xs mb-4 block">Chapter 02</span>
         <h2 className="text-6xl md:text-8xl font-serif italic mb-4">Experience <span className="title-transparent">Galaxy</span></h2>
         <p className="text-muted-foreground tracking-[0.4em] uppercase text-xs">Navigating through my professional universe</p>
       </motion.div>
