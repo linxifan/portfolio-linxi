@@ -62,7 +62,7 @@ export default function ProfileSection() {
           >
             <div className="w-full h-full rounded-xl bg-muted overflow-hidden flex items-center justify-center">
               <img 
-                src="/avatar.jpg" 
+                src={`${import.meta.env.BASE_URL}avatar.jpg`} 
                 alt="Linxi Fan" 
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
               />
@@ -82,11 +82,15 @@ export default function ProfileSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <h1 className="text-7xl md:text-9xl font-serif mb-4 leading-none tracking-tight">
-            <span className="block italic text-primary/80 text-4xl md:text-5xl border-l-4 border-primary pl-6 mb-4">Hello, I'm</span>
-            Linxi <span className="title-transparent hover:text-white/10">Fan</span>
+            <span className="flex items-center gap-4 italic text-primary/80 text-4xl md:text-5xl border-primary mb-4">
+              <span className="w-1 h-12 bg-primary animate-pulse" />
+              Hello, I'm
+            </span>
+            Linxi <br />
+            <span className="title-transparent hover:text-white/10">Fan</span>
           </h1>
-          <p className="text-muted-foreground text-xl md:text-2xl font-light tracking-widest uppercase mb-12 max-w-md">
-            Visual Storyteller & Digital Craftman
+          <p className="text-muted-foreground text-lg md:text-xl font-light tracking-[0.2em] uppercase mb-12 max-w-xl">
+            University of Waterloo 2A Bachelor of Computer Science
           </p>
         </motion.div>
 
@@ -96,6 +100,8 @@ export default function ProfileSection() {
             <Magnetic key={link.label}>
               <motion.a
                 href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group relative flex items-center gap-3"
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -116,7 +122,7 @@ export default function ProfileSection() {
 
       {/* Side decorative element */}
       <div className="hidden lg:block absolute right-12 top-1/2 -translate-y-1/2 vertical-text text-[10px] tracking-[0.5em] text-muted-foreground/30 uppercase [writing-mode:vertical-rl]">
-        Scroll to discover the universe — 2024 Portfolio
+        Scroll to discover the universe — 2026 Portfolio
       </div>
     </section>
   );
