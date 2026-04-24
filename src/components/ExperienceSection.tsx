@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import spaceBg from "@/assets/space-bg.jpeg";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 interface Experience {
   id: string;
@@ -8,262 +7,282 @@ interface Experience {
   company: string;
   location: string;
   description: string;
+  year: string;
   skills: string[];
-  // Position relative to 800x1540 background
-  right: number;
-  top: number;
+  orbitRadius: number;
+  orbitDuration: number;
   size: number;
+  color: string;
+  hasRing?: boolean;
+  texture?: string;
+  comingSoon?: boolean;
 }
 
 const experiences: Experience[] = [
   {
-    id: "a", title: "Job Title 1", company: "Company A", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["Python", "React", "SQL"],
-    right: 620, top: 585, size: 280,
+    id: "a", title: "Lead Architect", company: "Metaverse Corp", location: "Global",
+    year: "2023 - Pres",
+    description: "Orchestrating the core infrastructure of decentralized spatial environments, focusing on low-latency synchronization and high-fidelity rendering.",
+    skills: ["WebXR", "Next.js", "Three.js"],
+    orbitRadius: 180, orbitDuration: 30, size: 90, color: "#ff7eb3",
+    hasRing: true, texture: "linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%)"
   },
   {
-    id: "b", title: "Job Title 2", company: "Company B", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["JavaScript", "Node.js"],
-    right: 400, top: 550, size: 100,
+    id: "b", title: "AI Researcher", company: "Neural-X", location: "San Francisco",
+    year: "2021 - 2023",
+    description: "Developing large language models tailored for specialized creative drafting, reducing friction in conceptual artistic workflows.",
+    skills: ["PyTorch", "Rust", "CUDA"],
+    orbitRadius: 280, orbitDuration: 45, size: 55, color: "#7afcff",
+    texture: "radial-gradient(circle at 30% 30%, #7afcff 0%, #00d2ff 100%)"
   },
   {
-    id: "c", title: "Job Title 3", company: "Company C", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["C++", "Java", "AWS"],
-    right: 760, top: 375, size: 80,
+    id: "c", title: "Creative Engineer", company: "Vibe Studios", location: "Toronto",
+    year: "2020 - 2021",
+    description: "Pioneering interactive storytelling through generative art and motion-driven experiences for high-end luxury brands.",
+    skills: ["C++", "Vulkan", "TouchDesigner"],
+    orbitRadius: 130, orbitDuration: 20, size: 45, color: "#feffb7",
+    texture: "conic-gradient(from 180deg at 50% 50%, #feffb7 0deg, #ff9a9e 180deg, #feffb7 360deg)"
   },
   {
-    id: "d", title: "Job Title 4", company: "Company D", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["TypeScript", "GraphQL"],
-    right: 610, top: 160, size: 120,
+    id: "d", title: "DevOps Engineer", company: "Cloud Nodes", location: "Remote",
+    year: "2019 - 2020",
+    description: "Scaling distributed database clusters and automating CI/CD pipelines for mission-critical e-commerce infrastructure.",
+    skills: ["Kubernetes", "AWS", "Terraform"],
+    orbitRadius: 360, orbitDuration: 60, size: 75, color: "#95e1d3",
+    hasRing: true, texture: "linear-gradient(45deg, #95e1d3 0%, #00b894 100%)"
   },
   {
-    id: "e", title: "Job Title 5", company: "Company E", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["Rust", "Go", "Kubernetes"],
-    right: 490, top: 870, size: 100,
-  },
-  {
-    id: "f", title: "Job Title 6", company: "Company F", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["Docker", "Terraform"],
-    right: 590, top: 1060, size: 200,
-  },
-  {
-    id: "g", title: "Job Title 7", company: "Company G", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["Swift", "Kotlin"],
-    right: 210, top: 1180, size: 180,
-  },
-  {
-    id: "h", title: "Job Title 8", company: "Company H", location: "City, Country",
-    description: "Describe your work responsibilities and achievements here.",
-    skills: ["ML", "TensorFlow"],
-    right: 260, top: 980, size: 100,
-  },
+    id: "e", title: "System Overlord", company: "Secret Lab", location: "Underground",
+    year: "2025 - Future",
+    description: "Classified project involving autonomous planetary defense and orbital logistics optimization.",
+    skills: ["AI", "Robotics", "Fusion"],
+    orbitRadius: 420, orbitDuration: 80, size: 40, color: "#a29bfe",
+    comingSoon: true
+  }
 ];
 
-const BG_W = 800;
-const BG_H = 1540;
+function OrbitingText({ text, radius, isHovered }: { text: string; radius: number; isHovered: boolean }) {
+  return (
+    <AnimatePresence>
+      {isHovered && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 1.2, rotate: 20 }}
+          transition={{ duration: 0.5, ease: "circOut" }}
+        >
+          <svg className="w-full h-full overflow-visible" viewBox="0 0 200 200">
+            <path
+              id={`path-${text}`}
+              d={`M 100, 100 m -${radius}, 0 a ${radius},${radius} 0 1,1 ${radius * 2},0 a ${radius},${radius} 0 1,1 -${radius * 2},0`}
+              fill="none"
+            />
+            <text className="text-[6px] fill-white/80 font-bold tracking-[0.2em] uppercase origin-center animate-[spin_20s_linear_infinite]">
+              <textPath href={`#path-${text}`} startOffset="0%">
+                {text} • {text} • {text} • {text}
+              </textPath>
+            </text>
+          </svg>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
-/* Floating keyframes for each planet */
-const floatAnimation = (i: number) => ({
-  y: [0, -6 - (i % 3) * 2, 0],
-  transition: {
-    duration: 3 + (i % 3),
-    repeat: Infinity,
-    ease: "easeInOut" as const,
-  },
-});
-
-/* Glassmorphism tooltip */
-function PlanetTooltip({ exp, containerRef }: { exp: Experience; containerRef: React.RefObject<HTMLDivElement> }) {
-  // Position tooltip above the planet center
-  const leftPct = (exp.right / BG_W) * 100;
-  const topPct = (exp.top / BG_H) * 100;
-  const radiusPct = (exp.size / 2 / BG_H) * 100;
-
+function ExperienceCapsule({ exp, onClose }: { exp: Experience; onClose: () => void }) {
   return (
     <motion.div
-      className="absolute z-40 pointer-events-none"
-      style={{
-        left: `${leftPct}%`,
-        top: `${topPct}%`,
-        transform: `translate(-50%, calc(-100% - ${radiusPct}vh - 12px))`,
-      }}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 8 }}
-      transition={{ duration: 0.2 }}
+      className="absolute top-0 left-full ml-12 z-[60] w-[320px] pointer-events-auto origin-left"
+      initial={{ scale: 0, opacity: 0, x: -20 }}
+      animate={{ scale: 1, opacity: 1, x: 0 }}
+      exit={{ scale: 0, opacity: 0, x: -20 }}
+      transition={{ type: "spring", damping: 15, stiffness: 100 }}
     >
-      <div
-        className="px-4 py-2.5 rounded-xl text-center min-w-[120px]"
-        style={{
-          background: "hsl(220 30% 15% / 0.65)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid hsl(210 60% 70% / 0.2)",
-          boxShadow: "0 8px 32px hsl(210 80% 60% / 0.15)",
-        }}
-      >
-        <p className="text-sm font-semibold text-foreground" style={{ fontFamily: "var(--font-display)" }}>
-          {exp.title}
-        </p>
-        <p className="text-[11px] text-foreground/60">{exp.company}</p>
+      {/* Tether Line */}
+      <svg className="absolute top-1/2 right-full -translate-y-1/2 w-12 h-4 overflow-visible pointer-events-none">
+        <motion.path 
+          d="M 48 2 L 0 2" 
+          stroke={exp.color} 
+          strokeWidth="1" 
+          fill="none" 
+          strokeDasharray="4 2"
+          animate={{ strokeDashoffset: [-10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        />
+        <circle cx="0" cy="2" r="2" fill={exp.color} />
+      </svg>
+
+      <div className="glass-panel p-6 rounded-2xl relative overflow-hidden backdrop-blur-[40px] bg-black/60 border-white/10"
+           style={{ boxShadow: `0 0 40px ${exp.color}22, inset 0 0 20px ${exp.color}11` }}>
+        
+        <button onClick={(e) => { e.stopPropagation(); onClose(); }} 
+                className="absolute top-4 right-4 text-[10px] text-white/30 hover:text-white transition-colors">✕</button>
+
+        <div className="relative z-10">
+          <header className="mb-4">
+            <span className="text-[8px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
+            <h4 className="text-xl font-serif italic text-white leading-tight" style={{ textShadow: `0 0 10px ${exp.color}88` }}>{exp.title}</h4>
+            <p className="text-xs text-white/60">{exp.company}</p>
+          </header>
+
+          <div className="mb-6">
+             <p className="text-[13px] leading-relaxed text-white/80 font-light italic">
+              {exp.comingSoon ? "Planetary data restricted. Mission briefing coming soon..." : `"${exp.description}"`}
+             </p>
+          </div>
+
+          <footer className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+            {exp.skills.map(s => (
+              <span key={s} className="text-[8px] tracking-widest uppercase px-2 py-1 bg-white/5 border border-white/5 rounded-md text-white/50">
+                {s}
+              </span>
+            ))}
+          </footer>
+        </div>
       </div>
     </motion.div>
   );
 }
 
-/* Detail modal – circular notebook */
-function NotebookDetail({ exp, onClose }: { exp: Experience; onClose: () => void }) {
+function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSelected }: { 
+  exp: Experience; 
+  onSelect: (id: string | null) => void;
+  isHovered: boolean;
+  setHoveredId: (id: string | null) => void;
+  mouseX: any;
+  mouseY: any;
+  isSelected: boolean;
+}) {
+  const planetRef = useRef<HTMLButtonElement>(null);
+  const planetX = useMotionValue(0);
+  const planetY = useMotionValue(0);
+  const springX = useSpring(planetX, { stiffness: 50, damping: 15 });
+  const springY = useSpring(planetY, { stiffness: 50, damping: 15 });
+
+  useEffect(() => {
+    const unsubX = mouseX.on("change", (v: number) => {
+      if (!planetRef.current) return;
+      const rect = planetRef.current.getBoundingClientRect();
+      const dist = v - (rect.left + rect.width / 2);
+      if (Math.abs(dist) < 150) planetX.set(dist * 0.15);
+      else planetX.set(0);
+    });
+    const unsubY = mouseY.on("change", (v: number) => {
+      if (!planetRef.current) return;
+      const rect = planetRef.current.getBoundingClientRect();
+      const dist = v - (rect.top + rect.height / 2);
+      if (Math.abs(dist) < 150) planetY.set(dist * 0.15);
+      else planetY.set(0);
+    });
+    return () => { unsubX(); unsubY(); };
+  }, [mouseX, mouseY, planetX, planetY]);
+
+  const playHum = () => {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(40 + Math.random() * 20, ctx.currentTime);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 1.5);
+  };
+
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: "hsl(0 0% 0% / 0.5)", backdropFilter: "blur(6px)" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
+      className="absolute top-1/2 left-1/2 pointer-events-none"
+      animate={{ rotate: 360 }}
+      transition={{ duration: exp.orbitDuration, repeat: Infinity, ease: "linear" }}
+      style={{ width: exp.orbitRadius * 2, height: exp.orbitRadius * 2, marginLeft: -exp.orbitRadius, marginTop: -exp.orbitRadius }}
     >
-      <motion.div
-        className="relative w-72 h-72 md:w-80 md:h-80 rounded-full flex flex-col items-center justify-center text-center overflow-hidden"
-        style={{
-          background: "linear-gradient(145deg, hsl(40 25% 93%), hsl(40 20% 87%))",
-          boxShadow: "0 8px 40px hsl(0 0% 0% / 0.4), inset 0 0 20px hsl(0 0% 100% / 0.15)",
-          border: "3px solid hsl(220 15% 75% / 0.5)",
-        }}
-        initial={{ scale: 0, rotate: -20 }}
-        animate={{ scale: 1, rotate: 0 }}
-        exit={{ scale: 0, rotate: 20 }}
-        transition={{ type: "spring", damping: 18 }}
-        onClick={(e) => e.stopPropagation()}
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 flex items-center justify-center pointer-events-none"
       >
-        {/* Notebook lines */}
-        <div className="absolute inset-8 pointer-events-none opacity-[0.08]">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="border-b border-gray-500 mb-3" />
-          ))}
-        </div>
-
-        <div className="relative z-10 px-10">
-          <h3 className="text-lg md:text-xl font-bold mb-1" style={{ fontFamily: "var(--font-display)", color: "hsl(220 30% 20%)" }}>
-            {exp.title}
-          </h3>
-          <p className="text-sm mb-0.5" style={{ color: "hsl(220 20% 35%)" }}>{exp.company}</p>
-          <p className="text-xs mb-2" style={{ color: "hsl(220 15% 50%)" }}>📍 {exp.location}</p>
-          <p className="text-xs leading-relaxed mb-3" style={{ color: "hsl(220 15% 40%)" }}>{exp.description}</p>
-          <div className="flex flex-wrap gap-1 justify-center">
-            {exp.skills.map((s) => (
-              <span key={s} className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "hsl(220 20% 82% / 0.6)", color: "hsl(220 25% 30%)" }}>
-                {s}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center text-xs z-20 transition-colors"
-          style={{ background: "hsl(220 15% 80%)", color: "hsl(220 25% 30%)" }}
+        <motion.div 
+          animate={{ rotate: -360 }}
+          transition={{ duration: exp.orbitDuration, repeat: Infinity, ease: "linear" }}
+          className="relative flex items-center justify-center pointer-events-none"
         >
-          ✕
-        </button>
-      </motion.div>
+          <OrbitingText text={exp.title} radius={exp.size / 2 + 10} isHovered={isHovered} />
+          
+          <motion.button
+            ref={planetRef}
+            className="relative rounded-full cursor-pointer z-20 group pointer-events-auto"
+            style={{
+              width: exp.size, height: exp.size,
+              x: springX, y: springY,
+              background: exp.texture || `radial-gradient(circle at 30% 30%, ${exp.color}, #000)`,
+              boxShadow: `0 0 30px ${exp.color}44, inset -5px -5px 15px rgba(0,0,0,0.5), inset 5px 5px 15px rgba(255,255,255,0.2)`,
+            }}
+            whileHover={{ scale: 1.25 }}
+            onMouseEnter={() => { setHoveredId(exp.id); playHum(); }}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={(e) => { e.stopPropagation(); onSelect(isSelected ? null : exp.id); }}
+          >
+            {exp.hasRing && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[30%] border border-white/20 rounded-[100%] rotate-x-60 -rotate-12 pointer-events-none" 
+                   style={{ boxShadow: `0 0 15px ${exp.color}22` }} />
+            )}
+            <motion.div className="absolute inset-0 rounded-full" style={{ boxShadow: `0 0 50px ${exp.color}66` }}
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.7, 0.3] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+          </motion.button>
+
+          <AnimatePresence>
+            {isSelected && <ExperienceCapsule exp={exp} onClose={() => onSelect(null)} />}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
 
 export default function ExperienceSection() {
-  const [selected, setSelected] = useState<Experience | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY); };
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [mouseX, mouseY]);
 
   return (
-    <section id="experience" className="py-20 px-4">
-      <motion.h2
-        className="text-3xl md:text-4xl font-bold mb-8 text-center"
-        style={{ fontFamily: "var(--font-display)" }}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        🪐 My Experience Galaxy
-      </motion.h2>
+    <section id="experience" className="py-32 px-4 relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+             onClick={() => setSelectedId(null)}>
+      
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+        <div className="absolute top-1/2 left-1/2 -translate-x-full -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/20 blur-[150px] rounded-full animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 translate-x-0 translate-y-0 w-[500px] h-[500px] bg-blue-900/20 blur-[150px] rounded-full animate-[pulse_8s_ease-in-out_infinite]" />
+      </div>
 
-      {/* Container preserving 800:1540 aspect ratio */}
-      <motion.div
-        ref={containerRef}
-        className="relative w-full rounded-2xl overflow-hidden mx-auto"
-        style={{ maxWidth: 448, aspectRatio: `${BG_W} / ${BG_H}` }}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        {/* Background image */}
-        <img
-          src={spaceBg}
-          alt="Experience galaxy"
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
-
-        {/* Planets as interactive hotspots */}
-        {experiences.map((exp, i) => {
-          const leftPct = (exp.right / BG_W) * 100;
-          const topPct = (exp.top / BG_H) * 100;
-          // size = diameter in original coords, scale proportionally
-          const sizePct = (exp.size / BG_W) * 100;
-          const isHovered = hoveredId === exp.id;
-
-          return (
-            <motion.button
-              key={exp.id}
-              className="absolute z-20 rounded-full cursor-pointer"
-              style={{
-                left: `${leftPct}%`,
-                top: `${topPct}%`,
-                width: `${sizePct}%`,
-                aspectRatio: "1",
-                transform: "translate(-50%, -50%)",
-                background: isHovered
-                  ? "radial-gradient(circle, hsl(210 80% 80% / 0.25) 0%, transparent 70%)"
-                  : "transparent",
-                boxShadow: isHovered
-                  ? "0 0 30px 10px hsl(210 80% 75% / 0.35), 0 0 60px 20px hsl(210 70% 60% / 0.15)"
-                  : "none",
-                transition: "box-shadow 0.3s, background 0.3s",
-              }}
-              onMouseEnter={() => setHoveredId(exp.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              onClick={() => setSelected(exp)}
-              animate={floatAnimation(i)}
-              whileHover={{ scale: 1.12 }}
-              whileTap={{ scale: 0.95 }}
-            />
-          );
-        })}
-
-        {/* Tooltips */}
-        {experiences.map((exp) => (
-          <AnimatePresence key={exp.id}>
-            {hoveredId === exp.id && <PlanetTooltip exp={exp} containerRef={containerRef} />}
-          </AnimatePresence>
-        ))}
-
-        {/* Hint */}
-        <div className="absolute bottom-3 left-0 right-0 text-center z-10">
-          <p className="text-[10px] text-foreground/50" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
-            Hover over a planet · Click for details ✨
-          </p>
-        </div>
+      <motion.div className="text-center mb-20 z-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
+        <h2 className="text-6xl md:text-8xl font-serif italic mb-4">Experience <span className="title-transparent">Galaxy</span></h2>
+        <p className="text-muted-foreground tracking-[0.4em] uppercase text-xs">Navigating through my professional universe</p>
       </motion.div>
 
-      <AnimatePresence>
-        {selected && <NotebookDetail exp={selected} onClose={() => setSelected(null)} />}
-      </AnimatePresence>
+      <div className="relative w-full max-w-4xl aspect-square flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+          {[130, 180, 280, 360, 420].map((radius) => (
+            <div key={radius} className="absolute border border-white/10 rounded-full" style={{ width: radius * 2, height: radius * 2 }} />
+          ))}
+        </div>
+
+        <motion.div className="w-28 h-28 rounded-full relative z-0 flex items-center justify-center"
+                    style={{ background: "radial-gradient(circle, #fff, #ffcc33, #ff6600)", boxShadow: "0 0 120px #ff660088, 0 0 300px #ff660033" }}>
+          <div className="absolute inset-0 blur-3xl bg-orange-500/20 animate-pulse" />
+        </motion.div>
+
+        {experiences.map((exp) => (
+          <Planet key={exp.id} exp={exp} onSelect={setSelectedId} isHovered={hoveredId === exp.id} setHoveredId={setHoveredId} 
+                  mouseX={mouseX} mouseY={mouseY} isSelected={selectedId === exp.id} />
+        ))}
+      </div>
     </section>
   );
 }

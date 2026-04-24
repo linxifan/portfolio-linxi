@@ -12,17 +12,8 @@ const Index = () => {
     <div className="relative min-h-screen">
       <ParticleBackground />
       <Sidebar />
-      <main className="ml-16 md:ml-20 flex justify-center">
-        <div
-          className="w-full max-w-4xl min-h-screen"
-          style={{
-            background: "hsl(var(--card) / 0.45)",
-            backdropFilter: "blur(24px)",
-            borderLeft: "1px solid hsl(var(--border) / 0.3)",
-            borderRight: "1px solid hsl(var(--border) / 0.3)",
-            boxShadow: "0 0 80px hsl(0 0% 0% / 0.3)",
-          }}
-        >
+          <main className="ml-16 md:ml-20 flex justify-center">
+        <div className="w-full max-w-5xl min-h-screen glass-panel shadow-[0_0_100px_rgba(0,0,0,0.5)]">
           <ProfileSection />
           <AboutSection />
           <ExperienceSection />

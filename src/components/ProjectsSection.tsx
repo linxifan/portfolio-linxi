@@ -1,232 +1,145 @@
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import notebookCover from "@/assets/notebook-cover.jpg";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-const languageIcons: Record<string, string> = {
-  JavaScript: "🟨 JS",
-  Python: "🐍 Py",
-  C: "⚙️ C",
-  Rocq: "🔷 Rq",
-  HTML: "🌐 HTML",
-  TypeScript: "🔷 TS",
-  React: "⚛️ React",
-};
-
-interface ProjectPage {
+interface Project {
   title: string;
   description: string;
+  tagline: string;
   tech: string[];
-  link?: string;
+  image: string;
+  color: string;
 }
 
-const projects: ProjectPage[] = [
+const projects: Project[] = [
   {
-    title: "Project 1",
-    description: "Describe your project here. What problem did it solve? What did you learn?",
-    tech: ["React", "TypeScript"],
+    title: "Quantum Neural Link",
+    description: "A revolutionary brain-computer interface protocol that synchronization human thought patterns with quantum computing architectures.",
+    tagline: "Bridging the gap between neurons and qubits.",
+    tech: ["Python", "Rust", "C++"],
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
+    color: "#ff7eb3",
   },
   {
-    title: "Project 2",
-    description: "Describe your project here. What problem did it solve? What did you learn?",
-    tech: ["Python", "JavaScript"],
+    title: "Elysium UI Kit",
+    description: "A design system built for the next generation of spatial computing interfaces, focusing on organic glassmorphism and depth.",
+    tagline: "Design that breathes and reacts.",
+    tech: ["React", "Three.js", "Tailwind"],
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800",
+    color: "#7afcff",
   },
   {
-    title: "Project 3",
-    description: "Describe your project here. What problem did it solve? What did you learn?",
-    tech: ["C", "HTML"],
+    title: "Nebula OS",
+    description: "The first decentralized operating system designed to run entirely on distributed mesh networks without central authorities.",
+    tagline: "The internet, reimagined as an OS.",
+    tech: ["Go", "K8s", "Wasm"],
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    color: "#feffb7",
   },
   {
-    title: "Project 4",
-    description: "Describe your project here. What problem did it solve? What did you learn?",
-    tech: ["Rocq", "Python"],
-  },
-  {
-    title: "Project 5",
-    description: "Describe your project here. What problem did it solve? What did you learn?",
-    tech: ["TypeScript", "React", "JavaScript"],
+    title: "Aura Analytics",
+    description: "Predictive emotional intelligence platform for remote teams, visualizing team synergy through real-time biometric feedback.",
+    tagline: "Feel the pulse of your remote team.",
+    tech: ["TypeScript", "PyTorch", "GraphQL"],
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+    color: "#95e1d3",
   },
 ];
 
-function playPageTurnSound() {
-  try {
-    const ctx = new AudioContext();
-    const duration = 0.15;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(800, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + duration);
-    gain.gain.setValueAtTime(0.08, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
-  } catch {
-    // silent fail
-  }
+function ProjectCard({ project, scrollYProgress, index }: { project: Project; scrollYProgress: any; index: number }) {
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-300%"]);
+  
+  return (
+    <motion.div
+      style={{ x, willChange: "transform" }}
+      className="flex-shrink-0 w-[85vw] md:w-[45vw] h-[60vh] relative group cursor-pointer"
+    >
+      <div className="absolute inset-0 glass-card overflow-hidden translate-z-0">
+        {/* Parallax Image Overlay */}
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000 origin-center will-change-transform"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+        
+        {/* Content */}
+        <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <span className="text-primary font-bold tracking-[0.3em] uppercase text-[10px] mb-2 block">
+              {project.tagline}
+            </span>
+            <h3 className="text-4xl md:text-5xl font-serif mb-4 leading-tight">{project.title}</h3>
+            <p className="text-muted-foreground text-sm md:text-base max-w-md mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+              {project.description}
+            </p>
+            
+            <div className="flex flex-wrap gap-2">
+              {project.tech.map((t) => (
+                <span key={t} className="text-[10px] px-3 py-1 rounded-full border border-white/10 glass-panel">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Corner Decor */}
+        <div 
+          className="absolute top-0 right-0 w-32 h-32 blur-[80px] opacity-20 pointer-events-none"
+          style={{ background: project.color }}
+        />
+      </div>
+    </motion.div>
+  );
 }
 
 export default function ProjectsSection() {
-  const [page, setPage] = useState(-1);
-  const [direction, setDirection] = useState(0);
-
-  const goNext = useCallback(() => {
-    if (page < projects.length - 1) {
-      setDirection(1);
-      setPage((p) => p + 1);
-      playPageTurnSound();
-    }
-  }, [page]);
-
-  const goPrev = useCallback(() => {
-    if (page > -1) {
-      setDirection(-1);
-      setPage((p) => p - 1);
-      playPageTurnSound();
-    }
-  }, [page]);
-
-  const variants = {
-    enter: (d: number) => ({ rotateY: d > 0 ? 90 : -90, opacity: 0 }),
-    center: { rotateY: 0, opacity: 1 },
-    exit: (d: number) => ({ rotateY: d > 0 ? -90 : 90, opacity: 0 }),
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   return (
-    <section id="projects" className="min-h-screen flex flex-col items-center justify-center py-20 px-4">
-      <motion.h2
-        className="text-3xl md:text-4xl font-bold mb-12 text-center"
-        style={{ fontFamily: "var(--font-display)" }}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        📚 My Projects
-      </motion.h2>
-
-      <motion.div
-        className="relative w-full max-w-md"
-        style={{ perspective: 1200 }}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        <div className="relative aspect-[3/4] w-full">
-          <AnimatePresence mode="wait" custom={direction}>
-            {page === -1 ? (
-              <motion.div
-                key="cover"
-                className="absolute inset-0 rounded-lg overflow-hidden"
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4 }}
-              >
-                {/* Notebook cover background image */}
-                <img
-                  src={notebookCover}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                  width={768}
-                  height={1024}
-                />
-                {/* Center label area */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className="flex flex-col items-center px-10 py-8 rounded-sm"
-                    style={{
-                      background: "hsl(40 20% 95% / 0.88)",
-                      border: "2px solid hsl(220 20% 60% / 0.3)",
-                      boxShadow: "0 2px 12px hsl(0 0% 0% / 0.1)",
-                    }}
-                  >
-                    <h3
-                      className="text-2xl md:text-3xl font-bold mb-4"
-                      style={{ fontFamily: "var(--font-display)", color: "hsl(220 30% 25%)" }}
-                    >
-                      Projects I Did
-                    </h3>
-                    <div className="flex flex-wrap gap-2 justify-center mb-4">
-                      {Object.entries(languageIcons).map(([lang, icon]) => (
-                        <motion.span
-                          key={lang}
-                          className="text-xs px-2 py-0.5 rounded-full"
-                          style={{ background: "hsl(220 20% 85% / 0.6)", color: "hsl(220 30% 30%)" }}
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          {icon}
-                        </motion.span>
-                      ))}
-                    </div>
-                    <p className="text-sm" style={{ color: "hsl(220 20% 40%)" }}>Click → to read</p>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key={page}
-                className="absolute inset-0 book-page rounded-lg flex flex-col p-8"
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4 }}
-              >
-                <div className="absolute inset-4 pointer-events-none opacity-10">
-                  {Array.from({ length: 15 }).map((_, i) => (
-                    <div key={i} className="border-b border-gray-400 mb-4" />
-                  ))}
-                </div>
-                <div className="relative z-10">
-                  <p className="text-xs text-gray-400 mb-4 text-right">
-                    Page {page + 1} / {projects.length}
-                  </p>
-                  <h3 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-display)", color: "hsl(220 30% 20%)" }}>
-                    {projects[page].title}
-                  </h3>
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: "hsl(220 20% 30%)" }}>
-                    {projects[page].description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {projects[page].tech.map((t) => (
-                      <span key={t} className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-800">
-                        {languageIcons[t] || t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+    <section id="projects" ref={containerRef} className="h-[400vh] relative">
+      <div className="sticky top-0 h-screen flex flex-col items-start justify-start overflow-hidden pt-32 pb-20 px-12 md:px-20">
+        <div className="mb-16 relative z-10">
+          <h2 className="text-7xl md:text-9xl font-serif italic mb-4 leading-[0.9] tracking-tighter">
+            Curated <br />
+            <span className="title-transparent">Manifesto</span>
+          </h2>
+          <p className="text-muted-foreground tracking-[0.4em] uppercase text-[10px] md:text-xs">
+            A deep dive into digital craftsmanship & problem solving
+          </p>
         </div>
 
-        <div className="flex justify-between mt-4">
-          <motion.button
-            onClick={goPrev}
-            disabled={page === -1}
-            className="w-10 h-10 rounded-full glass-card flex items-center justify-center disabled:opacity-30 hover:bg-primary/20 transition-colors"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronLeft className="w-5 h-5 text-foreground" />
-          </motion.button>
-          <motion.button
-            onClick={goNext}
-            disabled={page === projects.length - 1}
-            className="w-10 h-10 rounded-full glass-card flex items-center justify-center disabled:opacity-30 hover:bg-primary/20 transition-colors"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronRight className="w-5 h-5 text-foreground" />
-          </motion.button>
+        {/* Horizontal Scroll Container */}
+        <div className="flex gap-12 w-full relative z-0">
+          {projects.map((project, i) => (
+            <ProjectCard 
+              key={project.title} 
+              project={project} 
+              scrollYProgress={scrollYProgress}
+              index={i}
+            />
+          ))}
+          
+          {/* Ending Spacer */}
+          <div className="flex-shrink-0 w-[50vw]" />
         </div>
-      </motion.div>
+
+        {/* Progress Bar */}
+        <div className="mt-auto w-full max-w-md h-[1px] bg-white/5 relative">
+          <motion.div 
+            className="absolute top-0 left-0 h-full bg-primary shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            style={{ width: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]) }}
+          />
+        </div>
+      </div>
     </section>
   );
 }

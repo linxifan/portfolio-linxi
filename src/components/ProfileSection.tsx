@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useSpring, useMotionValue, useTransform } from "framer-motion";
 import { Mail, Linkedin, Github, FileDown } from "lucide-react";
+import React, { useRef, useState } from "react";
 
 const socialLinks = [
   { icon: Mail, label: "Email", href: "mailto:your@email.com" },
@@ -8,49 +9,112 @@ const socialLinks = [
   { icon: FileDown, label: "Resume", href: "#" },
 ];
 
+function Magnetic({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current!.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX, y: middleY });
+  };
+
+  const reset = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const { x, y } = position;
+  return (
+    <motion.div
+      style={{ position: "relative" }}
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      animate={{ x, y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function ProfileSection() {
   return (
-    <section id="profile" className="min-h-screen flex items-center justify-center py-20 px-4">
+    <section id="profile" className="min-h-screen flex flex-col md:flex-row items-center justify-between py-32 px-12 gap-12 relative">
+      {/* Background large text decorative */}
+      <div className="absolute -left-20 top-1/4 title-transparent text-[15rem] font-serif select-none pointer-events-none opacity-10 -rotate-12">
+        Creative
+      </div>
+
+      {/* Avatar on the Left */}
       <motion.div
-        className="glass-card p-8 md:p-12 max-w-lg w-full text-center"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        className="relative z-10 w-full md:w-1/3 flex justify-start"
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Avatar placeholder */}
-        <motion.div
-          className="w-32 h-32 mx-auto mb-6 rounded-full border-4 border-primary/40 overflow-hidden bg-muted flex items-center justify-center"
-          whileHover={{ scale: 1.05, borderColor: "hsl(330 70% 72%)" }}
-        >
-          <span className="text-4xl">📷</span>
-        </motion.div>
-
-        <h1 className="text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: "var(--font-display)" }}>
-          Your Name
-        </h1>
-        <p className="text-muted-foreground text-lg mb-6">Your Title / Tagline</p>
-
-        {/* Social links */}
-        <div className="flex justify-center gap-4">
-          {socialLinks.map((link, i) => (
-            <motion.a
-              key={link.label}
-              href={link.href}
-              className="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-primary/20 transition-colors group"
-              whileHover={{ scale: 1.2, rotate: 10 }}
-              whileTap={{ scale: 0.9 }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              title={link.label}
-            >
-              <link.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-            </motion.a>
-          ))}
+        <div className="relative group">
+          <motion.div
+            className="w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden glass-card p-2 relative z-10"
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="w-full h-full rounded-xl bg-muted overflow-hidden flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-700">
+              <span className="text-6xl">📷</span>
+            </div>
+          </motion.div>
+          {/* Decorative frame */}
+          <div className="absolute -inset-4 border border-white/5 rounded-3xl -z-0 group-hover:scale-105 transition-transform duration-500" />
         </div>
       </motion.div>
+
+      {/* Content in the Middle/Right */}
+      <div className="flex-1 flex flex-col items-start md:pl-12 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <h1 className="text-7xl md:text-9xl font-serif mb-4 leading-none tracking-tight">
+            <span className="block italic text-primary/80 text-4xl md:text-5xl border-l-4 border-primary pl-6 mb-4">Hello, I'm</span>
+            Your <span className="title-transparent hover:text-white/10">Name</span>
+          </h1>
+          <p className="text-muted-foreground text-xl md:text-2xl font-light tracking-widest uppercase mb-12 max-w-md">
+            Visual Storyteller & Digital Craftman
+          </p>
+        </motion.div>
+
+        {/* Social links - Asymmetric placement */}
+        <div className="flex flex-wrap gap-8 items-center">
+          {socialLinks.map((link, i) => (
+            <Magnetic key={link.label}>
+              <motion.a
+                href={link.href}
+                className="group relative flex items-center gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 + i * 0.1 }}
+              >
+                <div className="w-14 h-14 rounded-full glass-card flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
+                  <link.icon className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+                <span className="text-xs uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -translate-x-2 group-hover:translate-x-0 font-bold">
+                  {link.label}
+                </span>
+              </motion.a>
+            </Magnetic>
+          ))}
+        </div>
+      </div>
+
+      {/* Side decorative element */}
+      <div className="hidden lg:block absolute right-12 top-1/2 -translate-y-1/2 vertical-text text-[10px] tracking-[0.5em] text-muted-foreground/30 uppercase [writing-mode:vertical-rl]">
+        Scroll to discover the universe — 2024 Portfolio
+      </div>
     </section>
   );
 }
