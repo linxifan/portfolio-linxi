@@ -105,6 +105,7 @@ function ProjectFrame({ project, onClick }: { project: Project; onClick: () => v
 
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   // Clone projects for seamless marquee
   const doubledProjects = [...projects, ...projects];
@@ -128,16 +129,16 @@ export default function ProjectsSection() {
       </div>
 
       {/* Marquee Container */}
-      <div className="flex py-12 relative">
-        <motion.div 
-          className="flex whitespace-nowrap"
-          animate={{
-            x: ["0%", "-50%"],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "linear",
+      <div 
+        className="flex py-12 relative overflow-hidden group"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        <div 
+          className="flex whitespace-nowrap marquee-track"
+          style={{ 
+            animationPlayState: isPaused ? 'paused' : 'running',
+            animation: 'marquee 40s linear infinite'
           }}
         >
           {doubledProjects.map((project, i) => (
@@ -147,7 +148,7 @@ export default function ProjectsSection() {
               onClick={() => setSelectedProject(project)}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Modal */}
@@ -225,6 +226,10 @@ export default function ProjectsSection() {
       </AnimatePresence>
 
       <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
         @keyframes grain {
           0%, 100% { transform: translate(0, 0) }
           10% { transform: translate(-5%, -10%) }
