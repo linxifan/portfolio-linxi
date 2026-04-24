@@ -83,7 +83,7 @@ export default function ProfileSection() {
         >
           <h1 className="text-7xl md:text-9xl font-serif mb-4 leading-none tracking-tight">
             <span className="flex items-center gap-4 italic text-primary/80 text-4xl md:text-5xl border-primary mb-4">
-              <span className="w-1 h-12 bg-primary animate-pulse" />
+              <span className="w-1 h-12 bg-primary cursor-blink" />
               Hello, I'm
             </span>
             Linxi <br />
@@ -124,6 +124,16 @@ export default function ProfileSection() {
       <div className="hidden lg:block absolute right-12 top-1/2 -translate-y-1/2 vertical-text text-[10px] tracking-[0.5em] text-muted-foreground/30 uppercase [writing-mode:vertical-rl]">
         Scroll to discover the universe — 2026 Portfolio
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes blink {
+          from, to { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .cursor-blink {
+          animation: blink 0.8s step-end infinite;
+        }
+      `}} />
     </section>
   );
 }
