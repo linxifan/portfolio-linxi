@@ -6,7 +6,9 @@ interface Experience {
   title: string;
   company: string;
   location: string;
+  tagline: string;
   description: string;
+  points: string[];
   year: string;
   skills: string[];
   orbitRadius: number;
@@ -22,7 +24,13 @@ const experiences: Experience[] = [
   {
     id: "a", title: "Lead Architect", company: "Metaverse Corp", location: "Global",
     year: "2023 - Pres",
+    tagline: "Orchestrating the core infrastructure of decentralized spatial environments.",
     description: "Orchestrating the core infrastructure of decentralized spatial environments, focusing on low-latency synchronization and high-fidelity rendering.",
+    points: [
+      "Engineered a distributed real-time rendering engine supporting 10k+ concurrent users.",
+      "Optimized network synchronization protocols, reducing perceived latency by 40%.",
+      "Led a cross-functional team of 15 engineers to launch the v2.0 spatial framework."
+    ],
     skills: ["WebXR", "Next.js", "Three.js"],
     orbitRadius: 180, orbitDuration: 30, size: 90, color: "#ff7eb3",
     hasRing: true, texture: "linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%)"
@@ -30,7 +38,13 @@ const experiences: Experience[] = [
   {
     id: "b", title: "AI Researcher", company: "Neural-X", location: "San Francisco",
     year: "2021 - 2023",
+    tagline: "Developing LLMs for specialized creative drafting and concept art.",
     description: "Developing large language models tailored for specialized creative drafting, reducing friction in conceptual artistic workflows.",
+    points: [
+      "Published 3 peer-reviewed papers on latent diffusion models for UI generation.",
+      "Developed a proprietary fine-tuning pipeline for domain-specific visual reasoning.",
+      "Integrated AI drafting tools into standard industry design software via APIs."
+    ],
     skills: ["PyTorch", "Rust", "CUDA"],
     orbitRadius: 280, orbitDuration: 45, size: 55, color: "#7afcff",
     texture: "radial-gradient(circle at 30% 30%, #7afcff 0%, #00d2ff 100%)"
@@ -38,7 +52,13 @@ const experiences: Experience[] = [
   {
     id: "c", title: "Creative Engineer", company: "Vibe Studios", location: "Toronto",
     year: "2020 - 2021",
+    tagline: "Pioneering interactive storytelling through motion-driven experiences.",
     description: "Pioneering interactive storytelling through generative art and motion-driven experiences for high-end luxury brands.",
+    points: [
+      "Designed immersive installations for 5 global luxury brand launches.",
+      "Built a custom Vulkan-based particle system for real-time interactive projection mapping.",
+      "Collaborated with digital artists to bridge the gap between creative vision and code."
+    ],
     skills: ["C++", "Vulkan", "TouchDesigner"],
     orbitRadius: 130, orbitDuration: 20, size: 45, color: "#feffb7",
     texture: "conic-gradient(from 180deg at 50% 50%, #feffb7 0deg, #ff9a9e 180deg, #feffb7 360deg)"
@@ -46,18 +66,16 @@ const experiences: Experience[] = [
   {
     id: "d", title: "DevOps Engineer", company: "Cloud Nodes", location: "Remote",
     year: "2019 - 2020",
+    tagline: "Scaling distributed database clusters and automating CI/CD pipelines.",
     description: "Scaling distributed database clusters and automating CI/CD pipelines for mission-critical e-commerce infrastructure.",
+    points: [
+      "Managed infrastructure supporting 1M+ daily active users with 99.99% uptime.",
+      "Implemented automated disaster recovery protocols for multi-region clusters.",
+      "Reduced deployment times by 60% through optimized Jenkins/K8s pipelines."
+    ],
     skills: ["Kubernetes", "AWS", "Terraform"],
     orbitRadius: 360, orbitDuration: 60, size: 75, color: "#95e1d3",
     hasRing: true, texture: "linear-gradient(45deg, #95e1d3 0%, #00b894 100%)"
-  },
-  {
-    id: "e", title: "System Overlord", company: "Secret Lab", location: "Underground",
-    year: "2025 - Future",
-    description: "Classified project involving autonomous planetary defense and orbital logistics optimization.",
-    skills: ["AI", "Robotics", "Fusion"],
-    orbitRadius: 420, orbitDuration: 80, size: 40, color: "#a29bfe",
-    comingSoon: true
   }
 ];
 
@@ -98,83 +116,53 @@ function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Dimmer Backdrop */}
       <motion.div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
-        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        onClick={onClose}
       />
       
-      {/* Main Content Card */}
       <motion.div 
-        className="relative w-full max-w-2xl bg-[#121212]/95 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] z-10"
-        initial={{ scale: 0.9, y: 30, opacity: 0 }}
-        animate={{ scale: 1, y: 0, opacity: 1 }}
-        exit={{ scale: 0.9, y: 30, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
+        layoutId={`capsule-${exp.id}`}
+        className="relative w-full max-w-2xl bg-[#121212]/95 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl z-10"
+        transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
-        {/* Decorative Top Glow */}
-        <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, ${exp.color}, transparent)` }} />
-
-        {/* Close Button */}
         <button 
-          onClick={onClose} 
-          className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all z-50 group"
+          onClick={(e) => { e.stopPropagation(); onClose(); }} 
+          className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all z-50"
         >
-          <X className="w-5 h-5 text-white/30 group-hover:text-white group-hover:rotate-90 transition-all duration-300" />
+          <X className="w-5 h-5 text-white/30" />
         </button>
 
-        <div className="p-10 md:p-16 relative z-10">
-          <div className="flex items-center gap-4 mb-8">
-            <span className="text-primary font-bold tracking-[0.4em] uppercase text-[10px] py-1 px-3 border border-primary/20 rounded-md">
-              Mission Report
-            </span>
-            <span className="text-white/20 text-[10px] tracking-[0.4em] uppercase font-mono">{exp.id.padStart(2, '0')} // DEP-SEC</span>
-          </div>
-
-          <header className="mb-12">
-            <div className="flex items-baseline gap-4 mb-2">
-              <span className="text-sm tracking-[0.5em] text-white/30 uppercase font-light">{exp.year}</span>
-              <div className="h-[1px] flex-1 bg-white/5" />
-            </div>
-            <h4 className="text-5xl md:text-7xl font-serif italic text-white leading-none mb-6 tracking-tight">
-              {exp.title}
-            </h4>
-            <div className="flex items-center gap-6">
-              <p className="text-xl text-white/70 font-light tracking-widest uppercase">{exp.company}</p>
-              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-              <p className="text-sm text-white/40 tracking-[0.2em] uppercase">{exp.location}</p>
-            </div>
+        <div className="p-10 md:p-14">
+          <header className="mb-8">
+            <span className="text-xs tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
+            <h4 className="text-4xl font-serif italic text-white leading-tight mb-2" style={{ textShadow: `0 0 15px ${exp.color}44` }}>{exp.title}</h4>
+            <p className="text-sm text-white/60 tracking-widest uppercase">{exp.company}</p>
           </header>
 
-          <div className="mb-14 relative">
-             {/* Large quotation mark decor */}
-            <span className="absolute -left-8 -top-8 text-8xl text-white/5 font-serif select-none">“</span>
-            <p className="text-xl md:text-2xl leading-relaxed text-white/90 font-light italic relative z-10">
-              {exp.comingSoon ? "Planetary data restricted. System briefing coming soon from the edge of the galaxy..." : exp.description}
-            </p>
+          <div className="mb-10 space-y-4">
+            {exp.points.map((point, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="flex gap-4 items-start"
+              >
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background: exp.color }} />
+                <p className="text-lg text-white/80 font-light leading-relaxed">{point}</p>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="space-y-6">
-            <p className="text-[10px] tracking-[0.4em] text-white/30 uppercase font-bold">Integrated Technologies</p>
-            <footer className="flex flex-wrap gap-3">
-              {exp.skills.map(s => (
-                <span key={s} className="text-[10px] tracking-widest uppercase px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/60 hover:text-primary hover:border-primary/30 transition-colors">
-                  {s}
-                </span>
-              ))}
-            </footer>
-          </div>
+          <footer className="flex flex-wrap gap-2 pt-8 border-t border-white/5">
+            {exp.skills.map(s => (
+              <span key={s} className="text-[8px] tracking-widest uppercase px-3 py-1.5 bg-white/5 border border-white/5 rounded-md text-white/50">
+                {s}
+              </span>
+            ))}
+          </footer>
         </div>
-
-        {/* Dynamic Background Aura */}
-        <div 
-          className="absolute -bottom-32 -left-32 w-96 h-96 blur-[150px] opacity-30 pointer-events-none"
-          style={{ background: exp.color }}
-        />
-        <div 
-          className="absolute -top-32 -right-32 w-64 h-64 blur-[120px] opacity-10 pointer-events-none"
-          style={{ background: exp.color }}
-        />
       </motion.div>
     </motion.div>
   );
@@ -183,58 +171,39 @@ function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () 
 function ExperienceCapsule({ exp, onClose, onOpenDetail }: { exp: Experience; onClose: () => void; onOpenDetail: () => void }) {
   return (
     <motion.div
-      className="absolute top-0 left-full ml-12 z-[60] w-[320px] pointer-events-auto origin-left cursor-pointer"
-      initial={{ scale: 0, opacity: 0, x: -20 }}
-      animate={{ scale: 1, opacity: 1, x: 0 }}
-      exit={{ scale: 0, opacity: 0, x: -20 }}
-      transition={{ type: "spring", damping: 15, stiffness: 100 }}
-      onClick={(e) => { e.stopPropagation(); onOpenDetail(); }}
+      layoutId={`capsule-${exp.id}`}
+      className="absolute top-0 left-full ml-12 z-[60] w-[320px] pointer-events-auto origin-left cursor-pointer bg-[#121212]/95 border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+      transition={{ type: "spring", damping: 20, stiffness: 200 }}
     >
-      {/* Tether Line */}
-      <svg className="absolute top-1/2 right-full -translate-y-1/2 w-12 h-4 overflow-visible pointer-events-none">
-        <motion.path 
-          d="M 48 2 L 0 2" 
-          stroke={exp.color} 
-          strokeWidth="1" 
-          fill="none" 
-          strokeDasharray="4 2"
-          animate={{ strokeDashoffset: [-10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        />
-        <circle cx="0" cy="2" r="2" fill={exp.color} />
-      </svg>
-
-      <div className="glass-panel p-6 rounded-2xl relative overflow-hidden backdrop-blur-[40px] bg-black/60 border-white/10 group hover:border-white/30 transition-all"
-           style={{ boxShadow: `0 0 40px ${exp.color}22, inset 0 0 20px ${exp.color}11` }}>
-        
+      <div className="p-6 relative">
         <button onClick={(e) => { e.stopPropagation(); onClose(); }} 
                 className="absolute top-4 right-4 text-[10px] text-white/30 hover:text-white transition-colors">✕</button>
 
-        <div className="relative z-10">
-          <header className="mb-4">
-            <span className="text-[8px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
-            <h4 className="text-xl font-serif italic text-white leading-tight group-hover:text-primary transition-colors" style={{ textShadow: `0 0 10px ${exp.color}88` }}>{exp.title}</h4>
-            <p className="text-xs text-white/60">{exp.company}</p>
-          </header>
+        <header className="mb-4">
+          <span className="text-[8px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
+          <h4 className="text-xl font-serif italic text-white leading-tight">{exp.title}</h4>
+          <p className="text-[10px] text-white/60 uppercase tracking-widest">{exp.company}</p>
+        </header>
 
-          <div className="mb-6">
-             <p className="text-[13px] leading-relaxed text-white/80 font-light italic">
-              {exp.comingSoon ? "Planetary data restricted. Mission briefing coming soon..." : `"${exp.description}"`}
-             </p>
-          </div>
-
-          <footer className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
-            {exp.skills.map(s => (
-              <span key={s} className="text-[8px] tracking-widest uppercase px-2 py-1 bg-white/5 border border-white/5 rounded-md text-white/50">
-                {s}
-              </span>
-            ))}
-          </footer>
-
-          <div className="mt-4 text-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <span className="text-[7px] text-primary font-bold tracking-[0.2em] uppercase">Click to expand detailed briefing</span>
-          </div>
+        <div className="mb-6">
+          <p className="text-[13px] leading-relaxed text-white/80 font-light italic">
+            {exp.tagline}
+          </p>
+          <button 
+            onClick={(e) => { e.stopPropagation(); onOpenDetail(); }}
+            className="mt-4 w-full py-2 bg-primary/10 border border-primary/20 rounded-md text-[10px] text-primary font-bold uppercase tracking-widest hover:bg-primary/20 transition-all"
+          >
+            Expand to view more
+          </button>
         </div>
+
+        <footer className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+          {exp.skills.map(s => (
+            <span key={s} className="text-[8px] tracking-widest uppercase px-2 py-1 bg-white/5 border border-white/5 rounded-md text-white/50">
+              {s}
+            </span>
+          ))}
+        </footer>
       </div>
     </motion.div>
   );
