@@ -24,7 +24,7 @@ interface Experience {
 const experiences: Experience[] = [
   {
     id: "a", title: "Software Engineer", company: "Transnode AI, LLC", location: "Remote",
-    year: "2026 Feb - Pres",
+    year: "2026 Feb - Present",
     tagline: "Building and scaling high-performance, user-focused applications from zero to real users.",
     description: "Building and scaling high-performance, user-focused applications with modern full-stack technologies，Developing and scaling performant cross-platform applications from zero to real users.",
     points: [
@@ -38,7 +38,7 @@ const experiences: Experience[] = [
   },
   {
     id: "b", title: "AI-Augmented Software Engineer", company: "YAOTU TECHNOLOGIES, LLC", location: "Remote",
-    year: "2026 Apr - Pres",
+    year: "2026 Apr - Present",
     tagline: "Contributing to cross-border web systems by improving workflow logic, refactoring state handling, and optimizing payment-related flows.",
     description: "Worked on cross-border web systems by resolving workflow issues, refactoring state logic, and decoupling payment-related processes.",
     points: [
@@ -46,50 +46,34 @@ const experiences: Experience[] = [
       "Contributed to a cross-functional web system using TypeScript and Next.js by supporting feature development, resolving integration issues, and collaborating across frontend and backend components.",
       "	Improved core workflow logic by refining business rules, adjusting state handling, and decoupling Stripe payment processing from deposit flow to improve system reliability and maintainability."
     ],
-    skills: ["PyTorch", "Rust", "CUDA"],
+    skills: ["TypeScript", "Node.js", "Express", "PostgreSQL", "Stripe API", "REST API Design", "React", "Next.js", "State Management", "System Refactoring"],
     orbitRadius: 280, orbitDuration: 45, size: 55, color: "#7afcff",
     texture: "radial-gradient(circle at 30% 30%, #7afcff 0%, #00d2ff 100%)"
   },
   {
-    id: "c", title: "Creative Engineer", company: "Vibe Studios", location: "Toronto",
-    year: "2020 - 2021",
-    tagline: "Pioneering interactive storytelling through motion-driven experiences.",
-    description: "Pioneering interactive storytelling through generative art and motion-driven experiences for high-end luxury brands.",
+    id: "c", title: "Chatbot Testing Volunteer", company: "Mood Disorders Society of Canada", location: "Remote",
+    year: "2026 Feb - Present",
+    tagline: "Chatbot testing volunteer focused on structured interaction testing, issue documentation, and user experience evaluation.",
+    description: "Conducted structured testing of AI chatbot interactions across diverse user scenarios, documenting system issues and providing feedback to improve response quality, usability, and conversational consistency.",
     points: [
-      "Designed immersive installations for 5 global luxury brand launches.",
-      "Built a custom Vulkan-based particle system for real-time interactive projection mapping.",
-      "Collaborated with digital artists to bridge the gap between creative vision and code."
+      "Conducted structured testing of chatbot interactions using diverse prompt scenarios, logging and categorizing system issues for analysis and debugging.",
+      "Provided structured feedback on conversation flows and response consistency to improve system reliability and user experience.",
     ],
-    skills: ["C++", "Vulkan", "TouchDesigner"],
+    skills: ["Chatbot Testing", "Test Case Design", "Structured QA Testing", "User Interaction Analysis", "Data Annotation", "Issue Tracking & Documentation"],
     orbitRadius: 130, orbitDuration: 20, size: 45, color: "#feffb7",
     texture: "conic-gradient(from 180deg at 50% 50%, #feffb7 0deg, #ff9a9e 180deg, #feffb7 360deg)"
   },
   {
-    id: "d", title: "DevOps Engineer", company: "Cloud Nodes", location: "Remote",
-    year: "2019 - 2020",
-    tagline: "Scaling distributed database clusters and automating CI/CD pipelines.",
-    description: "Scaling distributed database clusters and automating CI/CD pipelines for mission-critical e-commerce infrastructure.",
+    id: "d", title: "Web designer", company: "Waterloo CSC club", location: "Hybrid",
+    year: "2026 May - Present",
+    tagline: "Student web designer collaborating on UI/UX design for a university student profile page.",
+    description: "Collaborating with a student design team to design and prototype the Spring 2026 student profile page in Figma, contributing to layout structure, UI consistency, and iterative design improvements through team feedback.",
     points: [
-      "Managed infrastructure supporting 1M+ daily active users with 99.99% uptime.",
-      "Implemented automated disaster recovery protocols for multi-region clusters.",
-      "Reduced deployment times by 60% through optimized Jenkins/K8s pipelines."
+      "Collaborating with a student design team to design and prototype the Spring 2026 student profile page using Figma, contributing to layout planning, UI structure, and iterative design feedback.",
     ],
-    skills: ["Kubernetes", "AWS", "Terraform"],
+    skills: ["Figma", "UI Design", "Prototyping", "User Interface Design", "Team Collaboration"],
     orbitRadius: 360, orbitDuration: 60, size: 75, color: "#95e1d3",
     hasRing: true, texture: "linear-gradient(45deg, #95e1d3 0%, #00b894 100%)"
-  },
-  {
-    id: "e", title: "Future Frontier", company: "Coming Soon", location: "Deep Space",
-    year: "2026 - Beyond",
-    tagline: "Exploring the unknown boundaries of technology and creativity.",
-    description: "A classified venture into the next generation of digital experiences and autonomous systems.",
-    points: [
-      "Researching next-generation interaction models.",
-      "Building the foundations for future orbital projects."
-    ],
-    skills: ["Quantum Computing", "Neural-Interface", "Space-Logistics"],
-    orbitRadius: 440, orbitDuration: 85, size: 35, color: "#a29bfe",
-    texture: "radial-gradient(circle at 70% 70%, #a29bfe 0%, #6c5ce7 100%)"
   }
 ];
 
