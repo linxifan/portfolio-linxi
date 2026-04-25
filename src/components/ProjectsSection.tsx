@@ -14,12 +14,12 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "Quantum Neural Link",
-    tech: ["Python", "Rust", "C++"],
+    title: "WALL-E WALL-E",
+    tech: ["Python", "OpenCV","YOLO", "LLM","API", "Robotics & embedded systems"],
     image: `${import.meta.env.BASE_URL}robot-project.png`,
     color: "#ff7eb3",
     details: "Wall·E is a real-time multimodal autonomous robot developed for the UTRA Hackathon. The system combines computer vision, embedded sensing, and large language models to enable intelligent navigation and natural human–robot interaction. It integrates YOLO-based object detection, ultrasonic and color sensors for environmental awareness, and cloud-based AI models (Gemini and ElevenLabs) for real-time conversation and voice response. By fusing deterministic control with probabilistic AI reasoning, Wall·E demonstrates how modern robotics can move toward more adaptive and context-aware behavior in dynamic environments.",
-    link: "https://github.com/linxifan",
+    link: "https://devpost.com/software/111-k1z6bm",
   },
   {
     title: "Elysium UI Kit",
