@@ -93,46 +93,47 @@ function OrbitingText({ text, radius, isHovered }: { text: string; radius: numbe
 function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
   return (
     <motion.div 
-      className="fixed inset-0 z-[100] flex items-center justify-center p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-3xl"
-        onClick={onClose}
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
       />
       <motion.div 
-        className="relative w-full max-w-2xl glass-panel p-10 md:p-16 rounded-3xl border-white/10 overflow-hidden shadow-2xl"
+        className="relative w-full max-w-xl glass-panel p-8 md:p-12 rounded-3xl border-white/10 overflow-hidden shadow-2xl z-10"
         initial={{ scale: 0.9, y: 20, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.9, y: 20, opacity: 0 }}
-        style={{ boxShadow: `0 0 100px ${exp.color}11, inset 0 0 40px ${exp.color}05` }}
+        onClick={(e) => e.stopPropagation()}
+        style={{ boxShadow: `0 0 80px ${exp.color}11, inset 0 0 20px ${exp.color}05` }}
       >
         {/* Close Button */}
-        <button onClick={onClose} className="absolute top-8 right-8 text-white/30 hover:text-white transition-colors">
-          <X className="w-6 h-6" />
+        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors z-50">
+          <X className="w-4 h-4 text-white/50 hover:text-white" />
         </button>
 
         <div className="relative z-10">
-          <span className="text-primary font-bold tracking-[0.4em] uppercase text-xs mb-6 block">Mission Briefing</span>
-          <header className="mb-10">
-            <span className="text-xs tracking-[0.4em] text-white/40 uppercase block mb-2">{exp.year}</span>
-            <h4 className="text-5xl md:text-6xl font-serif italic text-white leading-tight mb-4" style={{ textShadow: `0 0 20px ${exp.color}88` }}>
+          <span className="text-primary font-bold tracking-[0.4em] uppercase text-[9px] mb-4 block">Detailed Briefing</span>
+          <header className="mb-8">
+            <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
+            <h4 className="text-3xl md:text-4xl font-serif italic text-white leading-tight mb-2" style={{ textShadow: `0 0 15px ${exp.color}66` }}>
               {exp.title}
             </h4>
-            <p className="text-xl text-white/60 font-light tracking-wide">{exp.company} — {exp.location}</p>
+            <p className="text-sm text-white/60 font-light tracking-wide">{exp.company} — {exp.location}</p>
           </header>
 
-          <div className="mb-12">
-            <p className="text-xl md:text-2xl leading-relaxed text-white/90 font-light italic">
+          <div className="mb-10">
+            <p className="text-base md:text-lg leading-relaxed text-white/90 font-light italic">
               {exp.comingSoon ? "Planetary data restricted. Mission briefing coming soon..." : `"${exp.description}"`}
             </p>
           </div>
 
-          <footer className="flex flex-wrap gap-3 pt-8 border-t border-white/10">
+          <footer className="flex flex-wrap gap-2 pt-6 border-t border-white/10">
             {exp.skills.map(s => (
-              <span key={s} className="text-[10px] tracking-widest uppercase px-4 py-2 bg-white/5 border border-white/10 rounded-full text-white/70">
+              <span key={s} className="text-[9px] tracking-widest uppercase px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/60">
                 {s}
               </span>
             ))}
@@ -141,7 +142,7 @@ function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () 
 
         {/* Decorative background glow */}
         <div 
-          className="absolute -bottom-20 -right-20 w-80 h-80 blur-[120px] opacity-20 pointer-events-none"
+          className="absolute -bottom-20 -right-20 w-64 h-64 blur-[100px] opacity-10 pointer-events-none"
           style={{ background: exp.color }}
         />
       </motion.div>
