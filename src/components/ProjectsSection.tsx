@@ -19,7 +19,7 @@ const projects: Project[] = [
     description: "A revolutionary brain-computer interface protocol that synchronizes human thought patterns with quantum computing architectures.",
     tagline: "Bridging the gap between neurons and qubits.",
     tech: ["Python", "Rust", "C++"],
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
+    image: `${import.meta.env.BASE_URL}robot-project.png`,
     color: "#ff7eb3",
     details: "The Quantum Neural Link project explores the frontier of neural-silicon integration. By leveraging quantum entanglement principles, we've developed a non-invasive telemetry system capable of mapping sub-millisecond neural fluctuations into a high-dimensional quantum state space. This allows for unprecedented data throughput between biological and synthetic processors.",
   },
