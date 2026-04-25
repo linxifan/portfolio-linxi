@@ -76,15 +76,15 @@ const experiences: Experience[] = [
     hasRing: true, texture: "linear-gradient(45deg, #95e1d3 0%, #00b894 100%)"
   },
   {
-    id: "e", title: "Future Frontier", company: "Coming Soon", location: "Deep Space",
-    year: "2026 - Beyond",
-    tagline: "Exploring the unknown boundaries of technology and creativity.",
-    description: "A classified venture into the next generation of digital experiences and autonomous systems.",
+    id: "e", title: "Robotics Club Member", company: "Glenlawn Collegiate", location: "Winnipeg, MB",
+    year: "2024 Sep - 2025 June",
+    tagline: "Robotics club member developing Python-based control logic and working on hardware-software integration for an autonomous system.",
+    description: "Developed Python-based navigation and control logic for an autonomous robotics system and collaborated with hardware team members to calibrate and validate sensor inputs, enabling reliable interaction between software control and physical components.",
     points: [
-      "Researching next-generation interaction models.",
-      "Building the foundations for future orbital projects."
+      "Developed Python-based navigation and control logic for an autonomous robotics system, supporting path planning and motion behavior implementation.",
+      "Collaborated with hardware team members to calibrate and validate sensor inputs, ensuring reliable communication between software control logic and physical robot components."
     ],
-    skills: ["Quantum Computing", "Neural-Interface", "Space-Logistics"],
+    skills: ["Python","Robotics Control Systems", "Sensor Calibration", "Embedded Systems Integration", "Hardware-Software Collaboration"],
     orbitRadius: 440, orbitDuration: 85, size: 35, color: "#a29bfe",
     texture: "radial-gradient(circle at 70% 70%, #a29bfe 0%, #6c5ce7 100%)"
   }
