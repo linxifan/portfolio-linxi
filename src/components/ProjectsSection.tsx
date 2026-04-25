@@ -4,57 +4,52 @@ import { X } from "lucide-react";
 
 interface Project {
   title: string;
-  description: string;
-  tagline: string;
   tech: string[];
   image: string;
   color: string;
   details?: string;
+  link?: string;
   videoUrl?: string;
 }
 
 const projects: Project[] = [
   {
     title: "Quantum Neural Link",
-    description: "A revolutionary brain-computer interface protocol that synchronizes human thought patterns with quantum computing architectures.",
-    tagline: "Bridging the gap between neurons and qubits.",
     tech: ["Python", "Rust", "C++"],
     image: `${import.meta.env.BASE_URL}robot-project.png`,
     color: "#ff7eb3",
-    details: "The Quantum Neural Link project explores the frontier of neural-silicon integration. By leveraging quantum entanglement principles, we've developed a non-invasive telemetry system capable of mapping sub-millisecond neural fluctuations into a high-dimensional quantum state space. This allows for unprecedented data throughput between biological and synthetic processors.",
+    details: "Wall·E is a real-time multimodal autonomous robot developed for the UTRA Hackathon. The system combines computer vision, embedded sensing, and large language models to enable intelligent navigation and natural human–robot interaction. It integrates YOLO-based object detection, ultrasonic and color sensors for environmental awareness, and cloud-based AI models (Gemini and ElevenLabs) for real-time conversation and voice response. By fusing deterministic control with probabilistic AI reasoning, Wall·E demonstrates how modern robotics can move toward more adaptive and context-aware behavior in dynamic environments.",
+    link: "https://github.com/linxifan",
   },
   {
     title: "Elysium UI Kit",
-    description: "A design system built for the next generation of spatial computing interfaces, focusing on organic glassmorphism and depth.",
-    tagline: "Design that breathes and reacts.",
     tech: ["React", "Three.js", "Tailwind"],
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800",
     color: "#7afcff",
     details: "Elysium is not just a UI kit; it's a philosophy of interaction. Designed specifically for mixed-reality environments, it utilizes ray-marching shaders to create glass surfaces that refract light based on the user's focal point. Every component is physically based, reacting to virtual wind and gravity to create an interface that feels alive.",
+    link: "https://github.com/linxifan",
   },
   {
     title: "Nebula OS",
-    description: "The first decentralized operating system designed to run entirely on distributed mesh networks without central authorities.",
-    tagline: "The internet, reimagined as an OS.",
     tech: ["Go", "K8s", "Wasm"],
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
     color: "#feffb7",
     details: "Nebula OS treats the global network as a single multicore computer. By utilizing WebAssembly for sandboxing and a novel P2P gossip protocol for state synchronization, it allows applications to run without servers. User data is fragmented, encrypted, and stored across the mesh, ensuring total privacy and censorship resistance.",
+    link: "https://github.com/linxifan",
   },
   {
     title: "Aura Analytics",
-    description: "Predictive emotional intelligence platform for remote teams, visualizing team synergy through real-time biometric feedback.",
-    tagline: "Feel the pulse of your remote team.",
     tech: ["TypeScript", "PyTorch", "GraphQL"],
     image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
     color: "#95e1d3",
     details: "Aura uses multimodal AI to analyze team dynamics beyond just Slack messages. By integrating optional biometric data (heart rate variability, sleep patterns) and natural language processing, it provides managers with a 'Team Resonance' score, highlighting burnout risks before they manifest and suggesting optimal collaboration windows.",
+    link: "https://github.com/linxifan",
   },
 ];
 
 function ProjectFrame({ project, onClick }: { project: Project; onClick: () => void }) {
   return (
-    <div 
+    <div
       className="flex-shrink-0 w-[400px] h-[300px] mx-4 relative group cursor-pointer overflow-hidden border-x-[12px] border-[#121212]"
       onClick={onClick}
     >
@@ -74,7 +69,7 @@ function ProjectFrame({ project, onClick }: { project: Project; onClick: () => v
             className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
-          
+
           {/* Edge Markings */}
           <div className="absolute top-10 left-2 text-[8px] font-mono text-red-500/60 font-bold uppercase tracking-widest z-30 pointer-events-none">
             KODAK 400
@@ -85,7 +80,6 @@ function ProjectFrame({ project, onClick }: { project: Project; onClick: () => v
 
           <div className="absolute bottom-0 left-0 p-6 z-20">
             <h3 className="text-xl font-serif italic text-white mb-1">{project.title}</h3>
-            <p className="text-[10px] text-white/60 uppercase tracking-widest">{project.tagline}</p>
           </div>
         </div>
       </div>
@@ -130,22 +124,22 @@ export default function ProjectsSection() {
       </div>
 
       {/* Marquee Container */}
-      <div 
+      <div
         className="flex py-12 relative overflow-hidden group"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        <div 
+        <div
           className="flex whitespace-nowrap marquee-track"
-          style={{ 
+          style={{
             animationPlayState: isPaused ? 'paused' : 'running',
             animation: 'marquee 40s linear infinite'
           }}
         >
           {doubledProjects.map((project, i) => (
-            <ProjectFrame 
-              key={`${project.title}-${i}`} 
-              project={project} 
+            <ProjectFrame
+              key={`${project.title}-${i}`}
+              project={project}
               onClick={() => setSelectedProject(project)}
             />
           ))}
@@ -163,7 +157,7 @@ export default function ProjectsSection() {
               className="absolute inset-0 bg-black/80 backdrop-blur-xl"
               onClick={() => setSelectedProject(null)}
             />
-            
+
             <motion.div
               layoutId={`project-${selectedProject.title}`}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -171,7 +165,7 @@ export default function ProjectsSection() {
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-4xl bg-[#121212] border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-10"
             >
-              <button 
+              <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors z-50 group"
               >
@@ -180,25 +174,36 @@ export default function ProjectsSection() {
 
               <div className="grid md:grid-cols-2">
                 <div className="relative h-64 md:h-full">
-                  <img 
-                    src={selectedProject.image} 
+                  <img
+                    src={selectedProject.image}
                     alt={selectedProject.title}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent md:bg-gradient-to-r" />
                 </div>
-                
+
                 <div className="p-8 md:p-12">
-                  <span className="text-primary font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">
-                    {selectedProject.tagline}
-                  </span>
                   <h3 className="text-4xl md:text-5xl font-serif italic mb-6">{selectedProject.title}</h3>
-                  
+
                   <div className="space-y-6">
                     <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                      {selectedProject.details || selectedProject.description}
+                      {selectedProject.details}
                     </p>
-                    
+
+                    {selectedProject.link && (
+                      <div className="py-2">
+                        <a 
+                          href={selectedProject.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-xs font-bold text-primary tracking-[0.3em] uppercase hover:text-white transition-colors group"
+                        >
+                          <span className="w-8 h-[1px] bg-primary group-hover:w-12 group-hover:bg-white transition-all" />
+                          View Project
+                        </a>
+                      </div>
+                    )}
+
                     <div className="flex flex-wrap gap-2 pt-4">
                       {selectedProject.tech.map((t) => (
                         <span key={t} className="text-[10px] px-3 py-1 rounded-full border border-white/10 bg-white/5 text-white/80">
@@ -206,18 +211,12 @@ export default function ProjectsSection() {
                         </span>
                       ))}
                     </div>
-
-                    <div className="pt-8">
-                      <button className="px-8 py-3 bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-primary transition-colors">
-                        Launch Project
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Decor */}
-              <div 
+              <div
                 className="absolute -bottom-20 -right-20 w-64 h-64 blur-[120px] opacity-20 pointer-events-none"
                 style={{ background: selectedProject.color }}
               />
@@ -226,7 +225,8 @@ export default function ProjectsSection() {
         )}
       </AnimatePresence>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
