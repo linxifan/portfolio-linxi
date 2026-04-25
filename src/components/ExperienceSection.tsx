@@ -98,51 +98,81 @@ function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      {/* Dimmer Backdrop */}
       <motion.div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-md"
         onClick={(e) => { e.stopPropagation(); onClose(); }}
       />
+      
+      {/* Main Content Card */}
       <motion.div 
-        className="relative w-full max-w-xl glass-panel p-8 md:p-12 rounded-3xl border-white/10 overflow-hidden shadow-2xl z-10"
-        initial={{ scale: 0.9, y: 20, opacity: 0 }}
+        className="relative w-full max-w-2xl bg-[#121212]/95 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] z-10"
+        initial={{ scale: 0.9, y: 30, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
-        exit={{ scale: 0.9, y: 20, opacity: 0 }}
+        exit={{ scale: 0.9, y: 30, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        style={{ boxShadow: `0 0 80px ${exp.color}11, inset 0 0 20px ${exp.color}05` }}
       >
+        {/* Decorative Top Glow */}
+        <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, ${exp.color}, transparent)` }} />
+
         {/* Close Button */}
-        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors z-50">
-          <X className="w-4 h-4 text-white/50 hover:text-white" />
+        <button 
+          onClick={onClose} 
+          className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all z-50 group"
+        >
+          <X className="w-5 h-5 text-white/30 group-hover:text-white group-hover:rotate-90 transition-all duration-300" />
         </button>
 
-        <div className="relative z-10">
-          <span className="text-primary font-bold tracking-[0.4em] uppercase text-[9px] mb-4 block">Detailed Briefing</span>
-          <header className="mb-8">
-            <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
-            <h4 className="text-3xl md:text-4xl font-serif italic text-white leading-tight mb-2" style={{ textShadow: `0 0 15px ${exp.color}66` }}>
+        <div className="p-10 md:p-16 relative z-10">
+          <div className="flex items-center gap-4 mb-8">
+            <span className="text-primary font-bold tracking-[0.4em] uppercase text-[10px] py-1 px-3 border border-primary/20 rounded-md">
+              Mission Report
+            </span>
+            <span className="text-white/20 text-[10px] tracking-[0.4em] uppercase font-mono">{exp.id.padStart(2, '0')} // DEP-SEC</span>
+          </div>
+
+          <header className="mb-12">
+            <div className="flex items-baseline gap-4 mb-2">
+              <span className="text-sm tracking-[0.5em] text-white/30 uppercase font-light">{exp.year}</span>
+              <div className="h-[1px] flex-1 bg-white/5" />
+            </div>
+            <h4 className="text-5xl md:text-7xl font-serif italic text-white leading-none mb-6 tracking-tight">
               {exp.title}
             </h4>
-            <p className="text-sm text-white/60 font-light tracking-wide">{exp.company} — {exp.location}</p>
+            <div className="flex items-center gap-6">
+              <p className="text-xl text-white/70 font-light tracking-widest uppercase">{exp.company}</p>
+              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+              <p className="text-sm text-white/40 tracking-[0.2em] uppercase">{exp.location}</p>
+            </div>
           </header>
 
-          <div className="mb-10">
-            <p className="text-base md:text-lg leading-relaxed text-white/90 font-light italic">
-              {exp.comingSoon ? "Planetary data restricted. Mission briefing coming soon..." : `"${exp.description}"`}
+          <div className="mb-14 relative">
+             {/* Large quotation mark decor */}
+            <span className="absolute -left-8 -top-8 text-8xl text-white/5 font-serif select-none">“</span>
+            <p className="text-xl md:text-2xl leading-relaxed text-white/90 font-light italic relative z-10">
+              {exp.comingSoon ? "Planetary data restricted. System briefing coming soon from the edge of the galaxy..." : exp.description}
             </p>
           </div>
 
-          <footer className="flex flex-wrap gap-2 pt-6 border-t border-white/10">
-            {exp.skills.map(s => (
-              <span key={s} className="text-[9px] tracking-widest uppercase px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/60">
-                {s}
-              </span>
-            ))}
-          </footer>
+          <div className="space-y-6">
+            <p className="text-[10px] tracking-[0.4em] text-white/30 uppercase font-bold">Integrated Technologies</p>
+            <footer className="flex flex-wrap gap-3">
+              {exp.skills.map(s => (
+                <span key={s} className="text-[10px] tracking-widest uppercase px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/60 hover:text-primary hover:border-primary/30 transition-colors">
+                  {s}
+                </span>
+              ))}
+            </footer>
+          </div>
         </div>
 
-        {/* Decorative background glow */}
+        {/* Dynamic Background Aura */}
         <div 
-          className="absolute -bottom-20 -right-20 w-64 h-64 blur-[100px] opacity-10 pointer-events-none"
+          className="absolute -bottom-32 -left-32 w-96 h-96 blur-[150px] opacity-30 pointer-events-none"
+          style={{ background: exp.color }}
+        />
+        <div 
+          className="absolute -top-32 -right-32 w-64 h-64 blur-[120px] opacity-10 pointer-events-none"
           style={{ background: exp.color }}
         />
       </motion.div>
