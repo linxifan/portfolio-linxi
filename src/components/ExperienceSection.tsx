@@ -90,14 +90,74 @@ function OrbitingText({ text, radius, isHovered }: { text: string; radius: numbe
   );
 }
 
-function ExperienceCapsule({ exp, onClose }: { exp: Experience; onClose: () => void }) {
+function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
+  return (
+    <motion.div 
+      className="fixed inset-0 z-[100] flex items-center justify-center p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div 
+        className="absolute inset-0 bg-black/40 backdrop-blur-3xl"
+        onClick={onClose}
+      />
+      <motion.div 
+        className="relative w-full max-w-2xl glass-panel p-10 md:p-16 rounded-3xl border-white/10 overflow-hidden shadow-2xl"
+        initial={{ scale: 0.9, y: 20, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.9, y: 20, opacity: 0 }}
+        style={{ boxShadow: `0 0 100px ${exp.color}11, inset 0 0 40px ${exp.color}05` }}
+      >
+        {/* Close Button */}
+        <button onClick={onClose} className="absolute top-8 right-8 text-white/30 hover:text-white transition-colors">
+          <X className="w-6 h-6" />
+        </button>
+
+        <div className="relative z-10">
+          <span className="text-primary font-bold tracking-[0.4em] uppercase text-xs mb-6 block">Mission Briefing</span>
+          <header className="mb-10">
+            <span className="text-xs tracking-[0.4em] text-white/40 uppercase block mb-2">{exp.year}</span>
+            <h4 className="text-5xl md:text-6xl font-serif italic text-white leading-tight mb-4" style={{ textShadow: `0 0 20px ${exp.color}88` }}>
+              {exp.title}
+            </h4>
+            <p className="text-xl text-white/60 font-light tracking-wide">{exp.company} — {exp.location}</p>
+          </header>
+
+          <div className="mb-12">
+            <p className="text-xl md:text-2xl leading-relaxed text-white/90 font-light italic">
+              {exp.comingSoon ? "Planetary data restricted. Mission briefing coming soon..." : `"${exp.description}"`}
+            </p>
+          </div>
+
+          <footer className="flex flex-wrap gap-3 pt-8 border-t border-white/10">
+            {exp.skills.map(s => (
+              <span key={s} className="text-[10px] tracking-widest uppercase px-4 py-2 bg-white/5 border border-white/10 rounded-full text-white/70">
+                {s}
+              </span>
+            ))}
+          </footer>
+        </div>
+
+        {/* Decorative background glow */}
+        <div 
+          className="absolute -bottom-20 -right-20 w-80 h-80 blur-[120px] opacity-20 pointer-events-none"
+          style={{ background: exp.color }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function ExperienceCapsule({ exp, onClose, onOpenDetail }: { exp: Experience; onClose: () => void; onOpenDetail: () => void }) {
   return (
     <motion.div
-      className="absolute top-0 left-full ml-12 z-[60] w-[320px] pointer-events-auto origin-left"
+      className="absolute top-0 left-full ml-12 z-[60] w-[320px] pointer-events-auto origin-left cursor-pointer"
       initial={{ scale: 0, opacity: 0, x: -20 }}
       animate={{ scale: 1, opacity: 1, x: 0 }}
       exit={{ scale: 0, opacity: 0, x: -20 }}
       transition={{ type: "spring", damping: 15, stiffness: 100 }}
+      onClick={(e) => { e.stopPropagation(); onOpenDetail(); }}
     >
       {/* Tether Line */}
       <svg className="absolute top-1/2 right-full -translate-y-1/2 w-12 h-4 overflow-visible pointer-events-none">
@@ -113,7 +173,7 @@ function ExperienceCapsule({ exp, onClose }: { exp: Experience; onClose: () => v
         <circle cx="0" cy="2" r="2" fill={exp.color} />
       </svg>
 
-      <div className="glass-panel p-6 rounded-2xl relative overflow-hidden backdrop-blur-[40px] bg-black/60 border-white/10"
+      <div className="glass-panel p-6 rounded-2xl relative overflow-hidden backdrop-blur-[40px] bg-black/60 border-white/10 group hover:border-white/30 transition-all"
            style={{ boxShadow: `0 0 40px ${exp.color}22, inset 0 0 20px ${exp.color}11` }}>
         
         <button onClick={(e) => { e.stopPropagation(); onClose(); }} 
@@ -122,7 +182,7 @@ function ExperienceCapsule({ exp, onClose }: { exp: Experience; onClose: () => v
         <div className="relative z-10">
           <header className="mb-4">
             <span className="text-[8px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
-            <h4 className="text-xl font-serif italic text-white leading-tight" style={{ textShadow: `0 0 10px ${exp.color}88` }}>{exp.title}</h4>
+            <h4 className="text-xl font-serif italic text-white leading-tight group-hover:text-primary transition-colors" style={{ textShadow: `0 0 10px ${exp.color}88` }}>{exp.title}</h4>
             <p className="text-xs text-white/60">{exp.company}</p>
           </header>
 
@@ -139,13 +199,17 @@ function ExperienceCapsule({ exp, onClose }: { exp: Experience; onClose: () => v
               </span>
             ))}
           </footer>
+
+          <div className="mt-4 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="text-[7px] text-primary font-bold tracking-[0.2em] uppercase">Click to expand detailed briefing</span>
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSelected }: { 
+function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSelected, onOpenDetail }: { 
   exp: Experience; 
   onSelect: (id: string | null) => void;
   isHovered: boolean;
@@ -153,6 +217,7 @@ function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSele
   mouseX: any;
   mouseY: any;
   isSelected: boolean;
+  onOpenDetail: () => void;
 }) {
   const planetRef = useRef<HTMLButtonElement>(null);
   const planetX = useMotionValue(0);
@@ -232,7 +297,7 @@ function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSele
           </motion.button>
 
           <AnimatePresence>
-            {isSelected && <ExperienceCapsule exp={exp} onClose={() => onSelect(null)} />}
+            {isSelected && <ExperienceCapsule exp={exp} onClose={() => onSelect(null)} onOpenDetail={onOpenDetail} />}
           </AnimatePresence>
         </motion.div>
       </div>
@@ -242,9 +307,12 @@ function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSele
 
 export default function ExperienceSection() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+
+  const selectedExp = useMemo(() => experiences.find(e => e.id === selectedId), [selectedId]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY); };
@@ -254,7 +322,7 @@ export default function ExperienceSection() {
 
   return (
     <section id="experience" className="py-32 px-4 relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-             onClick={() => setSelectedId(null)}>
+             onClick={() => { setSelectedId(null); setIsDetailOpen(false); }}>
       
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute top-1/2 left-1/2 -translate-x-full -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/20 blur-[150px] rounded-full animate-pulse" />
@@ -281,9 +349,15 @@ export default function ExperienceSection() {
 
         {experiences.map((exp) => (
           <Planet key={exp.id} exp={exp} onSelect={setSelectedId} isHovered={hoveredId === exp.id} setHoveredId={setHoveredId} 
-                  mouseX={mouseX} mouseY={mouseY} isSelected={selectedId === exp.id} />
+                  mouseX={mouseX} mouseY={mouseY} isSelected={selectedId === exp.id} onOpenDetail={() => setIsDetailOpen(true)} />
         ))}
       </div>
+
+      <AnimatePresence>
+        {isDetailOpen && selectedExp && (
+          <ExperienceDetailModal exp={selectedExp} onClose={() => setIsDetailOpen(false)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
