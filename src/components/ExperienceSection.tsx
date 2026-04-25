@@ -74,6 +74,19 @@ const experiences: Experience[] = [
     skills: ["Figma", "UI Design", "Prototyping", "User Interface Design", "Team Collaboration"],
     orbitRadius: 360, orbitDuration: 60, size: 75, color: "#95e1d3",
     hasRing: true, texture: "linear-gradient(45deg, #95e1d3 0%, #00b894 100%)"
+  },
+  {
+    id: "e", title: "Future Frontier", company: "Coming Soon", location: "Deep Space",
+    year: "2026 - Beyond",
+    tagline: "Exploring the unknown boundaries of technology and creativity.",
+    description: "A classified venture into the next generation of digital experiences and autonomous systems.",
+    points: [
+      "Researching next-generation interaction models.",
+      "Building the foundations for future orbital projects."
+    ],
+    skills: ["Quantum Computing", "Neural-Interface", "Space-Logistics"],
+    orbitRadius: 440, orbitDuration: 85, size: 35, color: "#a29bfe",
+    texture: "radial-gradient(circle at 70% 70%, #a29bfe 0%, #6c5ce7 100%)"
   }
 ];
 
