@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { X } from "lucide-react";
 
 interface Experience {
   id: string;
@@ -125,6 +126,7 @@ function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () 
         layoutId={`capsule-${exp.id}`}
         className="relative w-full max-w-2xl bg-[#121212]/95 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl z-10"
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
+        onClick={(e) => e.stopPropagation()}
       >
         <button 
           onClick={(e) => { e.stopPropagation(); onClose(); }} 
