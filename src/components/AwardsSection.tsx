@@ -109,6 +109,7 @@ export default function AwardsSection() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
       >
+        <span className="text-primary font-bold tracking-[0.4em] uppercase text-xs mb-4 block">Chapter 04</span>
         <h2 className="text-6xl md:text-8xl font-serif italic mb-4">Astral <span className="title-transparent">Honors</span></h2>
         <p className="text-muted-foreground tracking-[0.4em] uppercase text-xs">Monuments of past achievements</p>
       </motion.div>

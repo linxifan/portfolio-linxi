@@ -118,6 +118,7 @@ export default function HobbySection() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
       >
+        <span className="text-primary font-bold tracking-[0.4em] uppercase text-xs mb-4 block">Chapter 05</span>
         <h2 className="text-6xl md:text-8xl font-serif italic mb-4">Nebula <span className="title-transparent">Passions</span></h2>
         <p className="text-muted-foreground tracking-[0.4em] uppercase text-xs">Interests drifting across my infinity</p>
       </motion.div>
