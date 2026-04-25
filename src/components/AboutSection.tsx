@@ -26,15 +26,23 @@ export default function AboutSection() {
         {/* Decorative corner */}
         <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-primary/30 rounded-tr-3xl" />
 
-        <p className="text-muted-foreground text-xl leading-relaxed font-light">
-          I believe that every pixel tells a story and every interaction creates an emotion.
-          My journey started in the intersection of <span className="text-white">Design</span> and <span className="text-white">Technology</span>,
-          where I found my voice in building immersive digital experiences.
+        <p className="text-white/80 text-xl md:text-2xl leading-relaxed font-light italic mb-8">
+          "How do we build systems that stay reliable while everything around them keeps changing?"
         </p>
-        <br />
-        <p className="text-muted-foreground text-xl leading-relaxed font-light">
-          Today, I focus on crafting interfaces that feel as natural as physical objects while
-          harnessing the limitless potential of the digital medium. ✨
+        
+        <p className="text-muted-foreground text-lg md:text-xl leading-relaxed font-light mb-8">
+          That’s the question that keeps me curious. 
+          I enjoy working at the intersection of <span className="text-white">logic</span> and <span className="text-white">building</span>—turning ideas into code, 
+          experimenting with new tools, and learning through projects.
+        </p>
+
+        <p className="text-muted-foreground text-lg md:text-xl leading-relaxed font-light mb-8">
+          To me, computer science is both structured and creative: it’s about understanding systems, 
+          adapting to change, and solving problems in meaningful ways.
+        </p>
+
+        <p className="text-primary text-xl font-medium tracking-wide">
+          Always exploring, always building—this is me, Linxi, a student at the University of Waterloo :)
         </p>
       </motion.div>
     </section>
