@@ -118,6 +118,7 @@ export default function ProjectsSection() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
+          <span className="text-primary font-bold tracking-[0.4em] uppercase text-xs mb-4 block">Chapter 03</span>
           <h2 className="text-6xl md:text-8xl font-serif italic mb-4 leading-[0.9] tracking-tighter">
             Curated <br />
             <span className="title-transparent">Manifesto</span>
