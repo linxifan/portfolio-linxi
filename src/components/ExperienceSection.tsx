@@ -23,28 +23,28 @@ interface Experience {
 
 const experiences: Experience[] = [
   {
-    id: "a", title: "Lead Architect", company: "Metaverse Corp", location: "Global",
-    year: "2023 - Pres",
-    tagline: "Orchestrating the core infrastructure of decentralized spatial environments.",
-    description: "Orchestrating the core infrastructure of decentralized spatial environments, focusing on low-latency synchronization and high-fidelity rendering.",
+    id: "a", title: "Software Engineer", company: "Transnode AI, LLC", location: "Remote",
+    year: "2026 Feb - Pres",
+    tagline: "Building and scaling high-performance, user-focused applications from zero to real users.",
+    description: "Building and scaling high-performance, user-focused applications with modern full-stack technologies，Developing and scaling performant cross-platform applications from zero to real users.",
     points: [
-      "Engineered a distributed real-time rendering engine supporting 10k+ concurrent users.",
-      "Optimized network synchronization protocols, reducing perceived latency by 40%.",
-      "Led a cross-functional team of 15 engineers to launch the v2.0 spatial framework."
+      "Led the design and development of Earnie (iOS app) using TypeScript-based architecture, taking ownership of core product implementation and feature delivery from early development to launch.",
+      "Shipped Earnie to production with 500+ organic users in the first week of launch, driving initial product traction through rapid iteration and feature stabilization.",
+      "Designed and developed a responsive interactive landing page using React 18 and Tailwind CSS, implementing motion-based UI interactions with Framer Motion to create a modern, engaging user experience."
     ],
-    skills: ["WebXR", "Next.js", "Three.js"],
+    skills: ["React", "TypeScript", "Expo", "Node.js", "Express", "PostgreSQL", "Tailwind CSS", "Framer Motion"],
     orbitRadius: 180, orbitDuration: 30, size: 90, color: "#ff7eb3",
     hasRing: true, texture: "linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%)"
   },
   {
-    id: "b", title: "AI Researcher", company: "Neural-X", location: "San Francisco",
-    year: "2021 - 2023",
-    tagline: "Developing LLMs for specialized creative drafting and concept art.",
-    description: "Developing large language models tailored for specialized creative drafting, reducing friction in conceptual artistic workflows.",
+    id: "b", title: "AI-Augmented Software Engineer", company: "YAOTU TECHNOLOGIES, LLC", location: "Remote",
+    year: "2026 Apr - Pres",
+    tagline: "Contributing to cross-border web systems by improving workflow logic, refactoring state handling, and optimizing payment-related flows.",
+    description: "Worked on cross-border web systems by resolving workflow issues, refactoring state logic, and decoupling payment-related processes.",
     points: [
-      "Published 3 peer-reviewed papers on latent diffusion models for UI generation.",
-      "Developed a proprietary fine-tuning pipeline for domain-specific visual reasoning.",
-      "Integrated AI drafting tools into standard industry design software via APIs."
+      "Leveraged AI-assisted development (Claude/Cursor) to accelerate iteration cycles and support resolution of multiple product and engineering issues in a fast-paced development environment",
+      "Contributed to a cross-functional web system using TypeScript and Next.js by supporting feature development, resolving integration issues, and collaborating across frontend and backend components.",
+      "	Improved core workflow logic by refining business rules, adjusting state handling, and decoupling Stripe payment processing from deposit flow to improve system reliability and maintainability."
     ],
     skills: ["PyTorch", "Rust", "CUDA"],
     orbitRadius: 280, orbitDuration: 45, size: 55, color: "#7afcff",
@@ -111,25 +111,25 @@ function OrbitingText({ text, radius, isHovered }: { text: string; radius: numbe
 
 function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
   return (
-    <motion.div 
+    <motion.div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <motion.div 
+      <motion.div
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
         onClick={onClose}
       />
-      
-      <motion.div 
+
+      <motion.div
         layoutId={`capsule-${exp.id}`}
         className="relative w-full max-w-2xl bg-[#121212]/95 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl z-10"
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button 
-          onClick={(e) => { e.stopPropagation(); onClose(); }} 
+        <button
+          onClick={(e) => { e.stopPropagation(); onClose(); }}
           className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all z-50"
         >
           <X className="w-5 h-5 text-white/30" />
@@ -144,7 +144,7 @@ function ExperienceDetailModal({ exp, onClose }: { exp: Experience; onClose: () 
 
           <div className="mb-10 space-y-4">
             {exp.points.map((point, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -178,8 +178,8 @@ function ExperienceCapsule({ exp, onClose, onOpenDetail }: { exp: Experience; on
       transition={{ type: "spring", damping: 20, stiffness: 200 }}
     >
       <div className="p-6 relative">
-        <button onClick={(e) => { e.stopPropagation(); onClose(); }} 
-                className="absolute top-4 right-4 text-[10px] text-white/30 hover:text-white transition-colors">✕</button>
+        <button onClick={(e) => { e.stopPropagation(); onClose(); }}
+          className="absolute top-4 right-4 text-[10px] text-white/30 hover:text-white transition-colors">✕</button>
 
         <header className="mb-4">
           <span className="text-[8px] tracking-[0.4em] text-white/40 uppercase block mb-1">{exp.year}</span>
@@ -191,7 +191,7 @@ function ExperienceCapsule({ exp, onClose, onOpenDetail }: { exp: Experience; on
           <p className="text-[13px] leading-relaxed text-white/80 font-light italic">
             {exp.tagline}
           </p>
-          <button 
+          <button
             onClick={(e) => { e.stopPropagation(); onOpenDetail(); }}
             className="mt-4 w-full py-2 bg-primary/10 border border-primary/20 rounded-md text-[10px] text-primary font-bold uppercase tracking-widest hover:bg-primary/20 transition-all"
           >
@@ -211,8 +211,8 @@ function ExperienceCapsule({ exp, onClose, onOpenDetail }: { exp: Experience; on
   );
 }
 
-function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSelected, onOpenDetail }: { 
-  exp: Experience; 
+function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSelected, onOpenDetail }: {
+  exp: Experience;
   onSelect: (id: string | null) => void;
   isHovered: boolean;
   setHoveredId: (id: string | null) => void;
@@ -265,16 +265,16 @@ function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSele
       transition={{ duration: exp.orbitDuration, repeat: Infinity, ease: "linear" }}
       style={{ width: exp.orbitRadius * 2, height: exp.orbitRadius * 2, marginLeft: -exp.orbitRadius, marginTop: -exp.orbitRadius }}
     >
-      <div 
+      <div
         className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 flex items-center justify-center pointer-events-none"
       >
-        <motion.div 
+        <motion.div
           animate={{ rotate: -360 }}
           transition={{ duration: exp.orbitDuration, repeat: Infinity, ease: "linear" }}
           className="relative flex items-center justify-center pointer-events-none"
         >
           <OrbitingText text={exp.title} radius={exp.size / 2 + 10} isHovered={isHovered} />
-          
+
           <motion.button
             ref={planetRef}
             className="relative rounded-full cursor-pointer z-20 group pointer-events-auto"
@@ -290,12 +290,12 @@ function Planet({ exp, onSelect, isHovered, setHoveredId, mouseX, mouseY, isSele
             onClick={(e) => { e.stopPropagation(); onSelect(isSelected ? null : exp.id); }}
           >
             {exp.hasRing && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[30%] border border-white/20 rounded-[100%] rotate-x-60 -rotate-12 pointer-events-none" 
-                   style={{ boxShadow: `0 0 15px ${exp.color}22` }} />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[30%] border border-white/20 rounded-[100%] rotate-x-60 -rotate-12 pointer-events-none"
+                style={{ boxShadow: `0 0 15px ${exp.color}22` }} />
             )}
             <motion.div className="absolute inset-0 rounded-full" style={{ boxShadow: `0 0 50px ${exp.color}66` }}
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.7, 0.3] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+              animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.7, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
           </motion.button>
 
           <AnimatePresence>
@@ -324,8 +324,8 @@ export default function ExperienceSection() {
 
   return (
     <section id="experience" className="py-32 px-4 relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-             onClick={() => { setSelectedId(null); setIsDetailOpen(false); }}>
-      
+      onClick={() => { setSelectedId(null); setIsDetailOpen(false); }}>
+
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute top-1/2 left-1/2 -translate-x-full -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/20 blur-[150px] rounded-full animate-pulse" />
         <div className="absolute top-1/2 left-1/2 translate-x-0 translate-y-0 w-[500px] h-[500px] bg-blue-900/20 blur-[150px] rounded-full animate-[pulse_8s_ease-in-out_infinite]" />
@@ -345,13 +345,13 @@ export default function ExperienceSection() {
         </div>
 
         <motion.div className="w-28 h-28 rounded-full relative z-0 flex items-center justify-center"
-                    style={{ background: "radial-gradient(circle, #fff, #ffcc33, #ff6600)", boxShadow: "0 0 120px #ff660088, 0 0 300px #ff660033" }}>
+          style={{ background: "radial-gradient(circle, #fff, #ffcc33, #ff6600)", boxShadow: "0 0 120px #ff660088, 0 0 300px #ff660033" }}>
           <div className="absolute inset-0 blur-3xl bg-orange-500/20 animate-pulse" />
         </motion.div>
 
         {experiences.map((exp) => (
-          <Planet key={exp.id} exp={exp} onSelect={setSelectedId} isHovered={hoveredId === exp.id} setHoveredId={setHoveredId} 
-                  mouseX={mouseX} mouseY={mouseY} isSelected={selectedId === exp.id} onOpenDetail={() => setIsDetailOpen(true)} />
+          <Planet key={exp.id} exp={exp} onSelect={setSelectedId} isHovered={hoveredId === exp.id} setHoveredId={setHoveredId}
+            mouseX={mouseX} mouseY={mouseY} isSelected={selectedId === exp.id} onOpenDetail={() => setIsDetailOpen(true)} />
         ))}
       </div>
 
